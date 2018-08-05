@@ -1,0 +1,5 @@
+Flask_WTF==0.14.2
+WTForms==2.1
+Flask_Script==0.6.2
+Flask==0.12.2
+flask_mongoengine==0.9.3

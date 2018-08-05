@@ -7,3 +7,9 @@ fakebook_views = Blueprint('fakebook_views',__name__,template_folder='templates'
 @login_required
 def home():
     return render_template('fakebook_base.html',user=current_user)
+
+@fakebook_views.route('/fakebook/<path:path>')
+@login_required
+def serve_partial(path):
+    template =  path.split('/')[1]
+    return render_template(template)

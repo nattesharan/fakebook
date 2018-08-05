@@ -1,11 +1,13 @@
 from flask import Blueprint,render_template,request,flash,redirect,url_for
 from forms import LoginForm,RegistrationForm
-from flask_login import login_user,logout_user,login_required
+from flask_login import login_user,logout_user,login_required,current_user
 from fakebook.models import FakeBookUser
 auth_views = Blueprint('auth_views',__name__,template_folder='templates')
 
 @auth_views.route('/')
 def fakebook_index():
+    if current_user.is_authenticated:
+        return redirect(url_for('fakebook_views.home'))
     return render_template("fakebook.html",loginform=LoginForm(), registrationform=RegistrationForm())
 
 @auth_views.route('/login',methods=['POST'])

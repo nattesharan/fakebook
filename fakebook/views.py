@@ -23,10 +23,13 @@ def tables():
 def typography():
     return render_template('typography.html',user=current_user)
 
-@fakebook_views.route('/icons')
+@fakebook_views.route('/find-friends')
 @login_required
 def icons():
-    return render_template('icons.html',user=current_user)
+    user = current_user
+    people = FakeBookUser.objects.filter(id__ne=user.id)
+    kwargs = locals()
+    return render_template('find_friends.html', **kwargs)
 
 @fakebook_views.route('/maps')
 @login_required

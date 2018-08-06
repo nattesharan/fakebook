@@ -1,5 +1,10 @@
-Flask_WTF==0.14.2
-WTForms==2.1
-Flask_Script==0.6.2
 Flask==0.12.2
+Flask_Login==0.2.7
+Werkzeug==0.12.2
+WTForms==2.1
+mongoengine==0.15.0
+Flask_Cors==3.0.4
+Flask_WTF==0.14.2
 flask_mongoengine==0.9.3
+Flask_Script==0.6.2
+flask_socketio==3.0.1

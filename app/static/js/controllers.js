@@ -11,14 +11,29 @@ function DashboardController($scope) {
 }
 
 angular.module('fakebook').controller('FakebookController', FakebookController);
-FakebookController.$inject = ['$scope','socket']
+FakebookController.$inject = ['$scope','socket'];
 
 function FakebookController($scope,socket) {
     var vm = this;
-    vm.test = test;
-    function test() {
+    vm.establishConnection = establishConnection;
+    function establishConnection(user_id) {
+        var data = { 'user_id': user_id};
         socket.on('connect',function() {
-            console.log('Successfully connected to socket');
+            socket.emit('create_room',data);
         });
+        socket.on('disconnect',function() {
+            console.log("disconnected");
+        });
+    }
+}
+
+angular.module('fakebook').controller('FindFriendsController', FindFriendsController);
+FindFriendsController.$inject = ['$scope','socket'];
+
+function FindFriendsController($scope,socket) {
+    var vm = this;
+    vm.addFriend = addFriend;
+    function addFriend(user_id) {
+        console.log(user_id);
     }
 }

@@ -1,7 +1,7 @@
 {% extends 'fakebook_base.html' %}
 {% set active_page = 'find_friends' %}
 {% block fakebook_content %}
-<div class="container-fluid">
+<div class="container-fluid" ng-controller="FindFriendsController as vm">
     <div class="row">
         <div class="col-md-12">
             <div class="card">
@@ -15,7 +15,7 @@
                       <div class="font-icon-list col-lg-2 col-md-3 col-sm-4 col-xs-6 col-xs-6">
                         <div class="font-icon-detail"><img class="person-image" src="{{ person.image }}">
                           <input type="text" value="{{ person.name }}">
-                          <md-button class="md-raised md-primary add-friend">Add Friend</md-button>
+                          <md-button class="md-raised md-primary add-friend" ng-click="vm.addFriend('{{ person.id }}')">Add Friend</md-button>
                         </div>
                       </div>
                       {% endfor %}

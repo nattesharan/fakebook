@@ -1,4 +1,4 @@
-from flask import Blueprint,render_template,request,flash,redirect,url_for
+from flask import Blueprint,render_template,request,flash,redirect,url_for,session
 from forms import LoginForm,RegistrationForm
 from flask_login import login_user,logout_user,login_required,current_user
 from fakebook.models import FakeBookUser
@@ -17,6 +17,7 @@ def login():
         user = FakeBookUser.objects.get(email=form.loginemail.data)
         if user and user.verify_password(form.loginpassword.data):
             login_user(user,remember=True)
+            session['user_id'] = str(user.id)
             return redirect(url_for('fakebook_views.home'))
         form.loginemail.errors.append("Email or password invalid")
     return render_template("fakebook.html", loginform=form,registrationform=RegistrationForm())
@@ -41,5 +42,6 @@ def register():
 @auth_views.route('/logout')
 @login_required
 def logout():
+    session.pop('user_id',None)
     logout_user()
     return redirect(url_for('auth_views.fakebook_index'))

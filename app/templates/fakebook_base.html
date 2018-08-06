@@ -31,7 +31,7 @@
     <link href="../static/assets/css/pe-icon-7-stroke.css" rel="stylesheet" />
 
 </head>
-<body ng-controller="FakebookController as vm" ng-init="vm.test()">
+<body ng-controller="FakebookController as vm" ng-init="vm.establishConnection('{{ user.id }}')">
 
 <div class="wrapper">
     <div class="sidebar" data-color="purple" data-image="../static/assets/img/sidebar-5.jpg">
@@ -63,6 +63,12 @@
                         <p>User Profile</p>
                     </a>
                 </li>
+                <li {% if 'find_friends'== active_page %} class="active" {% endif %}>
+                    <a href="/find-friends">
+                        <i class="pe-7s-science"></i>
+                        <p>Find Friends</p>
+                    </a>
+                </li>
                 <li {% if 'tables'== active_page %} class="active" {% endif %}>
                     <a href="/tables">
                         <i class="pe-7s-note2"></i>
@@ -73,12 +79,6 @@
                     <a href="/typography">
                         <i class="pe-7s-news-paper"></i>
                         <p>Typography</p>
-                    </a>
-                </li>
-                <li {% if 'find_friends'== active_page %} class="active" {% endif %}>
-                    <a href="/find-friends">
-                        <i class="pe-7s-science"></i>
-                        <p>Icons</p>
                     </a>
                 </li>
                 <li {% if 'maps'== active_page %} class="active" {% endif %}>

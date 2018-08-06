@@ -1,4 +1,4 @@
-from flask_socketio import join_room,rooms
+from flask_socketio import join_room,rooms,leave_room
 from flask import request
 from fakebook.models import FakeBookUser
 def connect():
@@ -6,6 +6,8 @@ def connect():
 
 def disconnect():
     user_rooms = rooms()
+    for user_room in user_rooms:
+        leave_room(user_room)
     user_rooms.remove(request.sid)
     user_id = user_rooms[0]
     user = FakeBookUser.objects.get(id=user_id)

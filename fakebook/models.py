@@ -10,7 +10,7 @@ class FakeBookUser(Document,UserMixin):
     friends = ListField(ReferenceField('FakeBookUser'))
     pending_friends = ListField(ReferenceField('FakeBookUser'))
     is_online = BooleanField(default=False)
-    sid = StringField(max_length=128)
+    
     def set_password(self,password):
         self.password = generate_password_hash(password,method='sha256')
     

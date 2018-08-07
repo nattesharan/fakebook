@@ -1,5 +1,5 @@
 from werkzeug.security import generate_password_hash,check_password_hash
-from mongoengine import Document,StringField,DoesNotExist,ListField,BooleanField,ReferenceField
+from mongoengine import Document,StringField,DoesNotExist,ListField,BooleanField,ReferenceField,DateTimeField
 from flask_login import UserMixin
 class FakeBookUser(Document,UserMixin):
     email = StringField(max_length=128,required=True)
@@ -35,3 +35,11 @@ class FakeBookUser(Document,UserMixin):
     @property
     def name(self):
         return self.first_name + ' ' + self.last_name
+
+class FakebookNotification(Document):
+    notification_type = StringField(max_length=20,required=True)
+    is_read = BooleanField(default=False)
+    read_at = DateTimeField()
+    notification_message = StringField(max_length=128,required=True)
+    user_to_notify = ReferenceField(FakeBookUser)
+    initiated_by = ReferenceField(FakeBookUser)

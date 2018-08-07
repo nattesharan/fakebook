@@ -28,11 +28,28 @@ function FakebookController($scope,socket) {
 }
 
 angular.module('fakebook').controller('FindFriendsController', FindFriendsController);
-FindFriendsController.$inject = ['$scope','socket'];
+FindFriendsController.$inject = ['$scope','$http','socket','Notification'];
 
-function FindFriendsController($scope,socket) {
+function FindFriendsController($scope,$http,socket,Notification){
     var vm = this;
     vm.active = {};
+    vm.addFriend = addFriend;
+    function addFriend(person_id) {
+        var data = { 'person_id': person_id };
+        $http({
+            method: 'POST',
+            url: '/api/friend-request',
+            data: data
+        }).then(function result(response) {
+            console.log(response.data);
+            if(response.data.success) {
+                Notification.success({message: response.data.message, delay: 1000, positionY: 'bottom', positionX: 'right'});
+            }
+            else {
+                Notification.error({message: response.data.message, delay: 1000, positionY: 'bottom', positionX: 'right'});
+            }
+        });
+    }
     socket.on('connected_online',function(data) {
         data.users.forEach(user => {
             vm.active[user] = true;

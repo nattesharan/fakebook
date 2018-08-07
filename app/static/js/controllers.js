@@ -32,8 +32,12 @@ FindFriendsController.$inject = ['$scope','socket'];
 
 function FindFriendsController($scope,socket) {
     var vm = this;
-    vm.addFriend = addFriend;
-    function addFriend(user_id) {
-        console.log(user_id);
-    }
+    vm.active = {};
+    socket.on('connected_online',function(data) {
+        data.users.forEach(user => {
+            vm.active[user] = true;
+        });
+        // console.log(`User ${data.user_id} is online`)
+        // vm.active[data['user_id']] = true;
+    });
 }

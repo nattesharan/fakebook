@@ -1,7 +1,9 @@
-from flask import Blueprint,render_template,request,flash,redirect,url_for,session
+from flask import Blueprint,render_template,request,flash,redirect,url_for
 from forms import LoginForm,RegistrationForm
 from flask_login import login_user,logout_user,login_required,current_user
 from fakebook.models import FakeBookUser
+from mongoengine import DoesNotExist
+from app import socketio
 auth_views = Blueprint('auth_views',__name__,template_folder='templates')
 
 @auth_views.route('/')
@@ -14,10 +16,12 @@ def fakebook_index():
 def login():
     form = LoginForm(request.form)
     if form.validate():
-        user = FakeBookUser.objects.get(email=form.loginemail.data)
+        try:
+            user = FakeBookUser.objects.get(email=form.loginemail.data)
+        except DoesNotExist:
+            return render_template("fakebook.html", loginform=form,registrationform=RegistrationForm())
         if user and user.verify_password(form.loginpassword.data):
             login_user(user,remember=True)
-            session['user_id'] = str(user.id)
             return redirect(url_for('fakebook_views.home'))
         form.loginemail.errors.append("Email or password invalid")
     return render_template("fakebook.html", loginform=form,registrationform=RegistrationForm())
@@ -42,6 +46,6 @@ def register():
 @auth_views.route('/logout')
 @login_required
 def logout():
-    session.pop('user_id',None)
+    socketio.emit('disconnect')
     logout_user()
     return redirect(url_for('auth_views.fakebook_index'))

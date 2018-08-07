@@ -37,7 +37,11 @@ function FindFriendsController($scope,socket) {
         data.users.forEach(user => {
             vm.active[user] = true;
         });
-        // console.log(`User ${data.user_id} is online`)
-        // vm.active[data['user_id']] = true;
+    });
+    socket.on('disconnected_offline',function(data) {
+        vm.active = {};
+        data.users.forEach(user => {
+            vm.active[user] = true;
+        });
     });
 }

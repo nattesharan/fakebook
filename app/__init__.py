@@ -34,4 +34,6 @@ def load_blueprints():
     app.register_blueprint(auth_views)
     from fakebook.views import fakebook_views
     app.register_blueprint(fakebook_views)
+    from api.api import api_blueprint
+    app.register_blueprint(api_blueprint)
 load_blueprints()

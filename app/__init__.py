@@ -12,12 +12,17 @@ app.config['TEMPLATES_AUTO_RELOAD'] = True
 app.config['MONGODB_SETTINGS'] = MONGODB_SETTINGS
 app.config['WTF_CSRF_SECRET_KEY']="SECRETCSRFKEY"
 CORS(app)
-socketio = SocketIO(app,manage_session=False)
+socketio = SocketIO(manage_session=False)
+socketio.init_app(app)
 login_manager = LoginManager(app)
 db = MongoEngine(app)
 socketio.on_event('connect',main_sockets.connect)
 socketio.on_event('create_room',main_sockets.create_room)
 socketio.on_event('disconnect',main_sockets.disconnect)
+
+def notify_user(notification):
+    print notification
+    socketio.emit('received_friend_request',notification,room=notification['user_to_notify'])
 @login_manager.user_loader
 def loaduser(user_id):
     user = FakeBookUser.objects.get(id=user_id)

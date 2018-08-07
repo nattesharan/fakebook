@@ -43,3 +43,12 @@ class FakebookNotification(Document):
     notification_message = StringField(max_length=128,required=True)
     user_to_notify = ReferenceField(FakeBookUser)
     initiated_by = ReferenceField(FakeBookUser)
+
+    @property
+    def json(self):
+        return {
+            'is_read': self.is_read,
+            'notification_message': self.notification_message,
+            'user_to_notify': str(self.user_to_notify),
+            'initiated_by': str(self.initiated_by)
+        }

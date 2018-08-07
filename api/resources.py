@@ -3,16 +3,18 @@ from flask import request,jsonify
 from flask_login import login_required,current_user
 from app.settings import NOTIFICATION_TYPES
 from fakebook.models import FakeBookUser
-from utils import create_and_send_notification
+from utils import create_notification
+from app import notify_user
 class FriendRequestHandler(Resource):
     @login_required
     def post(self):
         data = request.get_json()
         user = FakeBookUser.objects.get(id=data['person_id'])
         if current_user not in user.pending_friends:
-            user.pending_friends.append(current_user)
+            user.pending_friends.append(current_user.id)
             user.save()
-            create_and_send_notification(NOTIFICATION_TYPES['FRIENDLY'],user)
+            notification = create_notification(NOTIFICATION_TYPES['FRIENDLY'],user)
+            notify_user(notification.json)
             return jsonify({
                 'success': True,
                 'message': 'Friend Request Sent to {}'.format(user.name)

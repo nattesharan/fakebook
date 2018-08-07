@@ -15,6 +15,7 @@ FakebookController.$inject = ['$scope','socket'];
 
 function FakebookController($scope,socket) {
     var vm = this;
+    vm.unreadNotifCount = 0;
     vm.establishConnection = establishConnection;
     function establishConnection(user_id) {
         var data = { 'user_id': user_id};
@@ -23,6 +24,9 @@ function FakebookController($scope,socket) {
         });
         socket.on('disconnect',function() {
             console.log("disconnected");
+        });
+        socket.on('received_friend_request',function(data) {
+            vm.unreadNotifCount += 1;
         });
     }
 }

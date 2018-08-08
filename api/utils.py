@@ -9,6 +9,14 @@ def create_notification(notif_type,notify_to):
     notification.save()
     return notification
 
+def get_notifications_sorted_by_date(user_id):
+    return FakebookNotification.objects.filter(user_to_notify=user_id).order_by('-id')
+
 def get_notifications_for_dashboard(user_id):
-    notifications = FakebookNotification.objects.filter(user_to_notify=user_id).order_by('-id')
+    notifications = get_notifications_sorted_by_date(user_id)
     return [notification.notif_json for notification in notifications[:5]]
+
+def get_all_notifications(skip,limit):
+    notifications = get_notifications_sorted_by_date(current_user.id)
+    user_notifications = notifications.skip(skip).limit(limit)
+    return [notification.notif_json for notification in user_notifications]

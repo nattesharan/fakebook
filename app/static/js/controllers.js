@@ -113,3 +113,36 @@ function FindFriendsController($scope,$http,socket,Notification){
         });
     });
 }
+
+angular.module('fakebook').controller('UserNotificationsController', UserNotificationsController);
+UserNotificationsController.$inject = ['$http','socket'];
+
+function UserNotificationsController($http,socket) {
+    var vm = this;
+    vm.notifications = [];
+    vm.loadNextPageNotifications = loadNextPageNotifications;
+    vm.endOfPage = false;
+    vm.busy = false;
+    vm.limit = 10;
+    vm.skip = 0;
+    function loadNextPageNotifications() {
+        vm.busy = true;
+        $http({
+            method: 'GET',
+            url: '/api/user/notifications',
+            params: {
+                'skip': vm.skip,
+                'limit': vm.limit
+            }
+        }).then(function result(response) {
+            vm.busy = false;
+            response.data.notifications.forEach(notification => {
+                vm.notifications.push(notification);
+            });
+            if(response.data.notifications.length < vm.limit) {
+                vm.endOfPage = true;
+            }
+            vm.skip += vm.limit;
+        });
+    }
+}

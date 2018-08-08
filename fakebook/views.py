@@ -18,7 +18,7 @@ def profile():
 def tables():
     return render_template('tables.html',user=current_user)
 
-@fakebook_views.route('/typography')
+@fakebook_views.route('/notifications')
 @login_required
 def typography():
     return render_template('typography.html',user=current_user)
@@ -36,7 +36,7 @@ def icons():
 def maps():
     return render_template('maps.html',user=current_user)
 
-@fakebook_views.route('/notifications')
+@fakebook_views.route('/sample-notifications')
 @login_required
 def notifications():
     return render_template('notifications.html',user=current_user)

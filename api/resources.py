@@ -3,7 +3,7 @@ from flask import request,jsonify
 from flask_login import login_required,current_user
 from app.settings import NOTIFICATION_TYPES
 from fakebook.models import FakeBookUser,FakebookNotification
-from utils import create_notification, get_notifications_for_dashboard
+from utils import create_notification, get_notifications_for_dashboard, get_all_notifications
 from app import notify_user
 class FriendRequestHandler(Resource):
     @login_required
@@ -46,4 +46,14 @@ class DashboardNotificationsHandler(Resource):
             read_notifications.append(notif.mark_as_read())
         return jsonify({
             'notifications': read_notifications
+        })
+
+class UserNotificationsHandler(Resource):
+    @login_required
+    def get(self):
+        limit = request.args.get('limit')
+        skip = request.args.get('skip')
+        notifications = get_all_notifications(int(skip),int(limit))
+        return jsonify({
+            'notifications': notifications
         })

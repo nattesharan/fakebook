@@ -116,6 +116,11 @@ function FindFriendsController($scope,$http,socket,Notification){
             vm.active[user] = true;
         });
     });
+    
+    socket.on('update_people_list',function() {
+        fetchFriends();
+    });
+    
     socket.on('disconnected_offline',function(data) {
         vm.active = {};
         data.users.forEach(user => {

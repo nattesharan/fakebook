@@ -5,7 +5,7 @@ from flask_login import login_required,current_user
 from app.settings import NOTIFICATION_TYPES
 from fakebook.models import FakeBookUser,FakebookNotification
 from utils import create_notification, get_notifications_for_dashboard, get_all_notifications, get_all_people
-from app import notify_user
+from app import notify_user,update_friends_list_for_receiver
 class FriendRequestHandler(Resource):
     @login_required
     def post(self):
@@ -20,6 +20,7 @@ class FriendRequestHandler(Resource):
             sending_user.save()
             notification = create_notification(NOTIFICATION_TYPES['FRIENDLY'],user)
             notify_user(str(user.id))
+            update_friends_list_for_receiver(str(user.id))
             return jsonify({
                 'success': True,
                 'friends': get_all_people(),

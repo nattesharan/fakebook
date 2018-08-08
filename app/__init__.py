@@ -24,6 +24,9 @@ socketio.on_event('disconnect',main_sockets.disconnect)
 def notify_user(person_id):
     notifications = get_notifications_for_dashboard(person_id)
     socketio.emit('received_friend_request',notifications,room=person_id)
+
+def update_friends_list_for_receiver(user_id):
+    socketio.emit('update_people_list',room=user_id)
 @login_manager.user_loader
 def loaduser(user_id):
     user = FakeBookUser.objects.get(id=user_id)

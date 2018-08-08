@@ -71,6 +71,7 @@ function NotificationController(socket,$http) {
     socket.on('received_friend_request',function(data) {
         vm.unreadNotifCount = 0;
         vm.notifications = data;
+        console.log(vm.notifications);
         vm.notifications.forEach(notification => {
             if(!notification.is_read) {
                 vm.unreadNotifCount += 1;

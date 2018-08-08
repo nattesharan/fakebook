@@ -10,9 +10,13 @@ class FriendRequestHandler(Resource):
     def post(self):
         data = request.get_json()
         user = FakeBookUser.objects.get(id=data['person_id'])
-        if current_user not in user.pending_friends:
-            user.pending_friends.append(current_user.id)
+        sending_user = FakeBookUser.objects.get(id=current_user.id)
+        if sending_user not in user.received_friend_requests and sending_user not in user.sent_friend_requests \
+            and user not in sending_user.received_friend_requests and user not in sending_user.sent_friend_requests:
+            user.received_friend_requests.append(current_user.id)
+            sending_user.sent_friend_requests.append(user.id)
             user.save()
+            sending_user.save()
             notification = create_notification(NOTIFICATION_TYPES['FRIENDLY'],user)
             notify_user(str(user.id))
             return jsonify({
@@ -27,7 +31,7 @@ class FriendRequestHandler(Resource):
         else:
             return jsonify({
                 'status': False,
-                'message': 'Request Already Sent'
+                'message': 'Request to connect already in progress'
             })
 
 class DashboardNotificationsHandler(Resource):

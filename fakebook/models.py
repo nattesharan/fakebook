@@ -9,7 +9,8 @@ class FakeBookUser(Document,UserMixin):
     image = StringField(max_length=128,default='https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS942xv3bE55-_AwDA31FCNGhfWNDaAmmUXy3a3uxRwrV-lcZu6')
     last_name = StringField(max_length=20,required=True)
     friends = ListField(ReferenceField('FakeBookUser',reverse_delete_rule=mongoengine.CASCADE))
-    pending_friends = ListField(ReferenceField('FakeBookUser',reverse_delete_rule=mongoengine.CASCADE))
+    sent_friend_requests = ListField(ReferenceField('FakeBookUser',reverse_delete_rule=mongoengine.CASCADE))
+    received_friend_requests = ListField(ReferenceField('FakeBookUser',reverse_delete_rule=mongoengine.CASCADE))
     is_online = BooleanField(default=False)
     
     def set_password(self,password):

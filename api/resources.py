@@ -38,3 +38,13 @@ class DashboardNotificationsHandler(Resource):
         return jsonify({
             'notifications': notifications
         })
+    @login_required
+    def put(self):
+        notifications = request.get_json()['read_notifications']
+        read_notifications = []
+        for notification in notifications:
+            notif = FakebookNotification.objects.get(id=notification['id'])
+            read_notifications.append(notif.mark_as_read())
+        return jsonify({
+            'notifications': read_notifications
+        })

@@ -53,6 +53,11 @@ class FakebookNotification(Document):
     user_to_notify = ReferenceField(FakeBookUser,reverse_delete_rule=mongoengine.CASCADE)
     initiated_by = ReferenceField(FakeBookUser,reverse_delete_rule=mongoengine.CASCADE)
 
+    def mark_as_read(self):
+        self.is_read = True
+        self.save()
+        return self.notif_json
+
     @property
     def json(self):
         return {

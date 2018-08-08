@@ -34,14 +34,32 @@ function NotificationController(socket,$http) {
     vm.unreadNotifCount = 0;
     vm.notifications = []
     vm.fetchNotifications = fetchNotifications;
+    vm.notificationsOpened = notificationsOpened;
 
+    function notificationsOpened() {
+        $http({
+            method: 'PUT',
+            url: '/api/notifications',
+            data: {
+                'read_notifications': vm.notifications
+            }
+        }).then(function result(response) {
+            vm.unreadNotifCount = 0;
+            vm.notifications = response.data.notifications;
+            console.log(vm.notifications);
+            vm.notifications.forEach(notification => {
+                if(!notification.is_read) {
+                    vm.unreadNotifCount += 1;
+                }
+            });
+        });
+    }
     function fetchNotifications() {
         $http({
             method: 'GET',
             url: '/api/notifications'
         }).then(function result(response) {
             vm.notifications = response.data.notifications;
-            console.log(vm.notifications);
             vm.notifications.forEach(notification => {
                 if(!notification.is_read) {
                     vm.unreadNotifCount += 1;

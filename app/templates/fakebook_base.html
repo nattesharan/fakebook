@@ -119,7 +119,7 @@
                             </a>
                         </li>
                         <li class="dropdown" ng-controller="NotificationController as vm" ng-init="vm.fetchNotifications()">
-                              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                              <a href="#" class="dropdown-toggle" data-toggle="dropdown" ng-click="vm.notificationsOpened()">
                                     <i class="fa fa-globe"></i>
                                     <b class="caret hidden-lg hidden-md"></b>
                                     <span ng-if="vm.unreadNotifCount" class="notification hidden-sm hidden-xs" data-ng-bind="[[ vm.unreadNotifCount ]]"></span>

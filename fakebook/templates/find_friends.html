@@ -15,7 +15,22 @@
                         <div class="font-icon-detail"><img class="person-image" ng-src="[[ person.image ]]">
                           <i class="fa fa-circle" ng-if="vm.active[person.id]" style="color:rgb(66, 183, 42)" aria-hidden="true"></i>
                           <input type="text" ng-value="person.name">
-                          <md-button class="md-raised md-primary add-friend" ng-click="vm.addFriend(person.id)">[[ person.status ]]</md-button>
+                          <md-menu ng-if="person.status == 'Friends' ">
+                            <md-button aria-label="Friends" class="md-accent md-raised md-hue-1" ng-click="$mdMenu.open()">
+                                [[ person.status ]]
+                            </md-button>
+                            <md-menu-content width="4" ng-mouseleave="$mdMenu.close()">
+                              <md-menu-item>
+                                <md-button ng-click="vm.confirmUnfriend($event,person.id,person.name)">
+                                  Unfriend
+                                </md-button>
+                              </md-menu-item>
+                            </md-menu-content>
+                          </md-menu>
+                          
+                          <md-button class="md-raised md-primary add-friend" ng-if="person.status == 'Cancel' " ng-click="vm.cancelRequest(person.id)">[[ person.status ]]</md-button>
+                          <md-button class="md-raised md-primary add-friend" ng-if="person.status == 'Accept' " ng-click="vm.acceptRequest(person.id)">[[ person.status ]]</md-button>
+                          <md-button class="md-raised md-primary add-friend" ng-if="person.status == 'Add Friend' " ng-click="vm.addFriend(person.id)">[[ person.status ]]</md-button>
                         </div>
                       </div>
                     </div>

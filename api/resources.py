@@ -36,7 +36,64 @@ class FriendRequestHandler(Resource):
                 'status': False,
                 'message': 'Request to connect already in progress'
             })
-
+    
+    @login_required
+    def delete(self):
+        person_id = request.args.get('person_id')
+        user = FakeBookUser.objects.get(id=person_id)
+        sending_user = FakeBookUser.objects.get(id=current_user.id)
+        if sending_user in user.received_friend_requests:
+            user.received_friend_requests.remove(sending_user)
+            sending_user.sent_friend_requests.remove(user)
+            user.save()
+            sending_user.save()
+            notification = create_notification(NOTIFICATION_TYPES['CANCEL_REQUEST'],user)
+            notify_user(str(user.id))
+            update_friends_list_for_receiver(str(user.id))
+            return jsonify({
+                'success': True,
+                'friends': get_all_people(),
+                'message': 'Friend Request Successfully Cancelled'
+            })
+        elif sending_user in user.friends:
+            return jsonify({
+                'success': False,
+                'message': 'Cannot Cancel as the request is accepted'
+            })
+        else:
+            return jsonify({
+                'success': False,
+                'message': 'Please send friend request'
+            })
+    @login_required
+    def put(self):
+        data = request.get_json()
+        accepting_user = FakeBookUser.objects.get(id=current_user.id)
+        sending_user = FakeBookUser.objects.get(id=data['person_id'])
+        if accepting_user in sending_user.sent_friend_requests:
+            accepting_user.received_friend_requests.remove(sending_user)
+            accepting_user.friends.append(sending_user)
+            sending_user.sent_friend_requests.remove(accepting_user)
+            sending_user.friends.append(accepting_user)
+            accepting_user.save()
+            sending_user.save()
+            notification = create_notification(NOTIFICATION_TYPES['ACCEPT_REQUEST'],sending_user)
+            notify_user(str(sending_user.id))
+            update_friends_list_for_receiver(str(sending_user.id))
+            return jsonify({
+                'success': True,
+                'message': 'You are now friends with {}'.format(sending_user.name)
+            })
+        elif sending_user in accepting_user.friends:
+            return jsonify({
+                'success': False,
+                'message': 'Already Friends'
+            })
+        else:
+            return jsonify({
+                'success': False,
+                'message': 'Please send friend request'
+            })
 class DashboardNotificationsHandler(Resource):
     @login_required
     def get(self):
@@ -72,3 +129,24 @@ class FriendsHandler(Resource):
         return jsonify({
             'friends': people
         })
+    @login_required
+    def put(self):
+        data = request.get_json()
+        user = FakeBookUser.objects.get(id=current_user.id)
+        friend = FakeBookUser.objects.get(id=data['person_id'])
+        if user in friend.friends:
+            user.friends.remove(friend)
+            friend.friends.remove(user)
+            user.save()
+            friend.save()
+            update_friends_list_for_receiver(str(friend.id))
+            return jsonify({
+                'success': True,
+                'friends': get_all_people(),
+                'message': 'Successfully unfriended'
+            })
+        else:
+            return jsonify({
+                'success': False,
+                'message': 'Not friends Yet'
+            })

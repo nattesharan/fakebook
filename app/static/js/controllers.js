@@ -79,14 +79,45 @@ function NotificationController(socket,$http) {
     });
 }
 angular.module('fakebook').controller('FindFriendsController', FindFriendsController);
-FindFriendsController.$inject = ['$scope','$http','socket','Notification'];
+FindFriendsController.$inject = ['$http','socket','Notification','$mdDialog'];
 
-function FindFriendsController($scope,$http,socket,Notification){
+function FindFriendsController($http,socket,Notification,$mdDialog){
     var vm = this;
     vm.active = {};
     vm.people = [];
     vm.addFriend = addFriend;
+    vm.acceptRequest = acceptRequest;
+    vm.cancelRequest = cancelRequest;
     vm.fetchFriends = fetchFriends;
+    vm.confirmUnfriend = confirmUnfriend;
+
+    function confirmUnfriend(event,person_id,person_name) {
+        var confirm = $mdDialog.confirm()
+          .title(`Would you really want to unfriend ${person_name}?`)
+          .textContent('This action cannot be reverted.')
+          .ariaLabel('confirmUnfriend')
+          .targetEvent(event)
+          .ok('Unfriend')
+          .cancel('Cancel');
+
+        $mdDialog.show(confirm).then(function() {
+            $http({
+                method: 'PUT',
+                url: '/api/friends',
+                data: {
+                    'person_id': person_id
+                }
+            }).then(function result(response) {
+                if(response.data.success) {
+                    vm.people = response.data.friends;
+                    Notification.success({message: response.data.message, delay: 1000, positionY: 'bottom', positionX: 'right'});
+                }
+                else {
+                    Notification.error({message: response.data.message, delay: 1000, positionY: 'bottom', positionX: 'right'});
+                }
+            });
+        });
+    }
     function fetchFriends() {
         $http({
             method: 'GET',
@@ -111,6 +142,43 @@ function FindFriendsController($scope,$http,socket,Notification){
             }
         });
     }
+
+    function acceptRequest(person_id) {
+        $http({
+            method: 'PUT',
+            url: '/api/friend-request',
+            data: {
+                'person_id': person_id
+            }
+        }).then(function result(response) {
+            if(response.data.success) {
+                Notification.success({message: response.data.message, delay: 1000, positionY: 'bottom', positionX: 'right'});
+                fetchFriends();
+            }
+            else {
+                Notification.error({message: response.data.message, delay: 1000, positionY: 'bottom', positionX: 'right'});
+            }
+        });
+    }
+
+    function cancelRequest(person_id) {
+        $http({
+            method: 'DELETE',
+            url: '/api/friend-request',
+            params: {
+                'person_id': person_id
+            }
+        }).then(function result(response) {
+            if(response.data.success) {
+                vm.people = response.data.friends;
+                Notification.success({message: response.data.message, delay: 1000, positionY: 'bottom', positionX: 'right'});
+            }
+            else {
+                Notification.error({message: response.data.message, delay: 1000, positionY: 'bottom', positionX: 'right'});
+            }
+        });
+    }
+
     socket.on('connected_online',function(data) {
         data.users.forEach(user => {
             vm.active[user] = true;

@@ -4,6 +4,7 @@ from flask_socketio import SocketIO
 from flask_cors import CORS
 from flask_mongoengine import MongoEngine
 from fakebook.models import FakeBookUser
+from api.utils import get_notifications_for_dashboard
 from settings import MONGODB_SETTINGS
 import main_sockets
 app = Flask(__name__)
@@ -20,8 +21,9 @@ socketio.on_event('connect',main_sockets.connect)
 socketio.on_event('create_room',main_sockets.create_room)
 socketio.on_event('disconnect',main_sockets.disconnect)
 
-def notify_user(notification):
-    socketio.emit('received_friend_request',notification,room=notification['user_to_notify'])
+def notify_user(person_id):
+    notifications = get_notifications_for_dashboard(person_id)
+    socketio.emit('received_friend_request',notifications,room=person_id)
 @login_manager.user_loader
 def loaduser(user_id):
     user = FakeBookUser.objects.get(id=user_id)

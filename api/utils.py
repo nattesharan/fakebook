@@ -8,3 +8,7 @@ def create_notification(notif_type,notify_to):
     notification.initiated_by = current_user.id
     notification.save()
     return notification
+
+def get_notifications_for_dashboard(user_id):
+    notifications = FakebookNotification.objects.filter(user_to_notify=user_id).order_by('-id')
+    return [notification.notif_json for notification in notifications[:5]]

@@ -69,7 +69,13 @@ function NotificationController(socket,$http) {
     }
     
     socket.on('received_friend_request',function(data) {
-        vm.unreadNotifCount += 1;
+        vm.unreadNotifCount = 0;
+        vm.notifications = data;
+        vm.notifications.forEach(notification => {
+            if(!notification.is_read) {
+                vm.unreadNotifCount += 1;
+            }
+        });
     });
 }
 angular.module('fakebook').controller('FindFriendsController', FindFriendsController);

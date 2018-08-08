@@ -83,5 +83,14 @@
 }
 
 .notif {
-    border: 1px solid blueviolet;
+    border-bottom: 1px solid blueviolet;
+}
+
+.default-class:hover {
+    background-color: white !important;
+    cursor:default;
+}
+
+.default-show-all {
+    background-color: white !important;
 }

@@ -4,7 +4,7 @@ from flask_login import login_required,current_user
 from app.settings import NOTIFICATION_TYPES
 from fakebook.models import FakeBookUser,FakebookNotification
 from utils import create_notification
-from app import notify_user
+from fakebook.sockets import notify_user
 class FriendRequestHandler(Resource):
     @login_required
     def post(self):

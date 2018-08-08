@@ -5,7 +5,6 @@ from flask_cors import CORS
 from flask_mongoengine import MongoEngine
 from fakebook.models import FakeBookUser
 from settings import MONGODB_SETTINGS
-import main_sockets
 app = Flask(__name__)
 app.secret_key = 'FAKEBOOKSECRET'
 app.config['TEMPLATES_AUTO_RELOAD'] = True
@@ -16,12 +15,8 @@ socketio = SocketIO(manage_session=False)
 socketio.init_app(app)
 login_manager = LoginManager(app)
 db = MongoEngine(app)
-socketio.on_event('connect',main_sockets.connect)
-socketio.on_event('create_room',main_sockets.create_room)
-socketio.on_event('disconnect',main_sockets.disconnect)
-
-def notify_user(notification):
-    socketio.emit('received_friend_request',notification,room=notification['user_to_notify'])
+import main_sockets
+import fakebook.sockets
 @login_manager.user_loader
 def loaduser(user_id):
     user = FakeBookUser.objects.get(id=user_id)

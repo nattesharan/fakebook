@@ -36,14 +36,6 @@ class FakeBookUser(Document,UserMixin):
     @property
     def name(self):
         return self.first_name + ' ' + self.last_name
-    
-    @property
-    def json(self):
-        return {
-            'name': self.name,
-            'image': self.image,
-            'is_online': self.is_online
-        }
 
 class FakebookNotification(Document):
     notification_type = StringField(max_length=20,required=True)
@@ -63,8 +55,8 @@ class FakebookNotification(Document):
         return {
             'is_read': self.is_read,
             'notification_message': self.notification_message,
-            'user_to_notify': self.user_to_notify.json,
-            'initiated_by': self.initiated_by.json
+            'user_to_notify': str(self.user_to_notify),
+            'initiated_by': str(self.initiated_by)
         }
     
     @property

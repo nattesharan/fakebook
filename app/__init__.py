@@ -21,7 +21,6 @@ socketio.on_event('create_room',main_sockets.create_room)
 socketio.on_event('disconnect',main_sockets.disconnect)
 
 def notify_user(notification):
-    print notification
     socketio.emit('received_friend_request',notification,room=notification['user_to_notify'])
 @login_manager.user_loader
 def loaduser(user_id):

@@ -2138,7 +2138,7 @@ fieldset[disabled] .btn-neutral.active {
 
 .dropdown-menu > li > a:hover,
 .dropdown-menu > li > a:focus {
-    background-color: #F5F5F5;
+    background-color: blueviolet;
     color: #333333;
     opacity: 1;
     text-decoration: none;

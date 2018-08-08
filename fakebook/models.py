@@ -61,3 +61,11 @@ class FakebookNotification(Document):
             'user_to_notify': self.user_to_notify.json,
             'initiated_by': self.initiated_by.json
         }
+    
+    @property
+    def notif_json(self):
+        return {
+            'message': self.notification_message,
+            'is_read': self.is_read,
+            'id': str(self.id)
+        }

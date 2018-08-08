@@ -74,3 +74,14 @@
 .add-friend {
     font-size: 11px;
 }
+
+.notif-read {
+    background-color: #F5F5F5;
+    color: #333333;
+    opacity: 1;
+    text-decoration: none;
+}
+
+.notif {
+    border: 1px solid blueviolet;
+}

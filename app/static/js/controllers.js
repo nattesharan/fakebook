@@ -15,7 +15,6 @@ FakebookController.$inject = ['$scope','socket'];
 
 function FakebookController($scope,socket) {
     var vm = this;
-    vm.unreadNotifCount = 0;
     vm.establishConnection = establishConnection;
     function establishConnection(user_id) {
         var data = { 'user_id': user_id};
@@ -25,9 +24,6 @@ function FakebookController($scope,socket) {
         socket.on('disconnect',function() {
             console.log("disconnected");
         });
-        socket.on('received_friend_request',function(data) {
-            vm.unreadNotifCount += 1;
-        });
     }
 }
 
@@ -35,11 +31,28 @@ angular.module('fakebook').controller('NotificationController', NotificationCont
 NotificationController.$inject = ['socket','$http'];
 function NotificationController(socket,$http) {
     var vm = this;
-    vm.notifications = {}
-    vm.showNotifications = showNotifications;
-    function showNotifications(notifications) {
-        console.log(notifications);
+    vm.unreadNotifCount = 0;
+    vm.notifications = []
+    vm.fetchNotifications = fetchNotifications;
+
+    function fetchNotifications() {
+        $http({
+            method: 'GET',
+            url: '/api/notifications'
+        }).then(function result(response) {
+            vm.notifications = response.data.notifications;
+            console.log(vm.notifications);
+            vm.notifications.forEach(notification => {
+                if(!notification.is_read) {
+                    vm.unreadNotifCount += 1;
+                }
+            });
+        });
     }
+    
+    socket.on('received_friend_request',function(data) {
+        vm.unreadNotifCount += 1;
+    });
 }
 angular.module('fakebook').controller('FindFriendsController', FindFriendsController);
 FindFriendsController.$inject = ['$scope','$http','socket','Notification'];

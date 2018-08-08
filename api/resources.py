@@ -2,7 +2,7 @@ from flask_restful import Resource
 from flask import request,jsonify
 from flask_login import login_required,current_user
 from app.settings import NOTIFICATION_TYPES
-from fakebook.models import FakeBookUser
+from fakebook.models import FakeBookUser,FakebookNotification
 from utils import create_notification
 from app import notify_user
 class FriendRequestHandler(Resource):
@@ -29,3 +29,12 @@ class FriendRequestHandler(Resource):
                 'status': False,
                 'message': 'Request Already Sent'
             })
+
+class DashboardNotificationsHandler(Resource):
+    @login_required
+    def get(self):
+        notifications = FakebookNotification.objects.filter(user_to_notify=current_user.id).order_by('-id')
+        notifications = [notification.notif_json for notification in notifications[:5]]
+        return jsonify({
+            'notifications': notifications
+        })

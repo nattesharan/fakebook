@@ -61,3 +61,12 @@ class UserNotificationsHandler(Resource):
         return jsonify({
             'notifications': notifications
         })
+
+class FriendsHandler(Resource):
+    @login_required
+    def get(self):
+        people = FakeBookUser.objects.filter(id__ne=current_user.id)
+        people = [person.json for person in people]
+        return jsonify({
+            'friends': people
+        })

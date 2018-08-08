@@ -1,6 +1,6 @@
 from werkzeug.security import generate_password_hash,check_password_hash
 from mongoengine import Document,StringField,DoesNotExist,ListField,BooleanField,ReferenceField,DateTimeField
-from flask_login import UserMixin
+from flask_login import UserMixin,current_user
 import mongoengine
 class FakeBookUser(Document,UserMixin):
     email = StringField(max_length=128,required=True)
@@ -26,6 +26,16 @@ class FakeBookUser(Document,UserMixin):
     def become_offline(self):
         self.is_online = False
         self.save()
+    
+    def get_current_user_status(self):
+        if current_user in self.friends and self in current_user.friends:
+            return 'Friends'
+        elif current_user in self.received_friend_requests:
+            return 'Cancel'
+        elif self in current_user.received_friend_requests:
+            return 'Accept'
+        else:
+            return 'Add Friend'
 
     @classmethod
     def find_user(cls,email):
@@ -37,6 +47,15 @@ class FakeBookUser(Document,UserMixin):
     @property
     def name(self):
         return self.first_name + ' ' + self.last_name
+    
+    @property
+    def json(self):
+        return {
+            'id': str(self.id),
+            'name': self.name,
+            'image': self.image,
+            'status': self.get_current_user_status()
+        }
 
 class FakebookNotification(Document):
     notification_type = StringField(max_length=20,required=True)

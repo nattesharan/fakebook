@@ -26,10 +26,7 @@ def typography():
 @fakebook_views.route('/find-friends')
 @login_required
 def icons():
-    user = current_user
-    people = FakeBookUser.objects.filter(id__ne=user.id)
-    kwargs = locals()
-    return render_template('find_friends.html', **kwargs)
+    return render_template('find_friends.html', user=current_user)
 
 @fakebook_views.route('/maps')
 @login_required

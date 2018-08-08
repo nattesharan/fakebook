@@ -46,7 +46,6 @@ function NotificationController(socket,$http) {
         }).then(function result(response) {
             vm.unreadNotifCount = 0;
             vm.notifications = response.data.notifications;
-            console.log(vm.notifications);
             vm.notifications.forEach(notification => {
                 if(!notification.is_read) {
                     vm.unreadNotifCount += 1;
@@ -85,7 +84,17 @@ FindFriendsController.$inject = ['$scope','$http','socket','Notification'];
 function FindFriendsController($scope,$http,socket,Notification){
     var vm = this;
     vm.active = {};
+    vm.people = [];
     vm.addFriend = addFriend;
+    vm.fetchFriends = fetchFriends;
+    function fetchFriends() {
+        $http({
+            method: 'GET',
+            url: '/api/friends'
+        }).then(function result(response) {
+            vm.people = response.data.friends;
+        });
+    }
     function addFriend(person_id) {
         var data = { 'person_id': person_id };
         $http({

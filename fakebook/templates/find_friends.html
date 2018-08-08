@@ -1,7 +1,7 @@
 {% extends 'fakebook_base.html' %}
 {% set active_page = 'find_friends' %}
 {% block fakebook_content %}
-<div class="container-fluid" ng-controller="FindFriendsController as vm">
+<div class="container-fluid" ng-controller="FindFriendsController as vm" ng-init="vm.fetchFriends()">
     <div class="row">
         <div class="col-md-12">
             <div class="card">
@@ -11,15 +11,13 @@
                 </div>
                 <div class="content all-icons">
                     <div class="row">
-                      {% for person in people %}
-                      <div class="font-icon-list col-lg-2 col-md-3 col-sm-4 col-xs-6 col-xs-6">
-                        <div class="font-icon-detail"><img class="person-image" src="{{ person.image }}">
-                          <i class="fa fa-circle" ng-if="vm.active['{{ person.id }}']" style="color:rgb(66, 183, 42)" aria-hidden="true"></i>
-                          <input type="text" value="{{ person.name }}">
-                          <md-button class="md-raised md-primary add-friend" ng-click="vm.addFriend('{{ person.id }}')">Add Friend</md-button>
+                      <div class="font-icon-list col-lg-2 col-md-3 col-sm-4 col-xs-6 col-xs-6" ng-repeat="person in vm.people">
+                        <div class="font-icon-detail"><img class="person-image" ng-src="[[ person.image ]]">
+                          <i class="fa fa-circle" ng-if="vm.active[person.id]" style="color:rgb(66, 183, 42)" aria-hidden="true"></i>
+                          <input type="text" ng-value="person.name">
+                          <md-button class="md-raised md-primary add-friend" ng-click="vm.addFriend(person.id)">[[ person.status ]]</md-button>
                         </div>
                       </div>
-                      {% endfor %}
                     </div>
                 </div>
             </div>

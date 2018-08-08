@@ -1,9 +1,10 @@
 from flask_restful import Resource
 from flask import request,jsonify
+import requests
 from flask_login import login_required,current_user
 from app.settings import NOTIFICATION_TYPES
 from fakebook.models import FakeBookUser,FakebookNotification
-from utils import create_notification, get_notifications_for_dashboard, get_all_notifications
+from utils import create_notification, get_notifications_for_dashboard, get_all_notifications, get_all_people
 from app import notify_user
 class FriendRequestHandler(Resource):
     @login_required
@@ -21,6 +22,7 @@ class FriendRequestHandler(Resource):
             notify_user(str(user.id))
             return jsonify({
                 'success': True,
+                'friends': get_all_people(),
                 'message': 'Friend Request Sent to {}'.format(user.name)
             })
         elif current_user in user.friends:
@@ -65,8 +67,7 @@ class UserNotificationsHandler(Resource):
 class FriendsHandler(Resource):
     @login_required
     def get(self):
-        people = FakeBookUser.objects.filter(id__ne=current_user.id)
-        people = [person.json for person in people]
+        people = get_all_people()
         return jsonify({
             'friends': people
         })

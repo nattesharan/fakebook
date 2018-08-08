@@ -1,4 +1,4 @@
-from fakebook.models import FakebookNotification
+from fakebook.models import FakebookNotification,FakeBookUser
 from flask_login import current_user
 def create_notification(notif_type,notify_to):
     notification = FakebookNotification(notification_type=notif_type)
@@ -20,3 +20,7 @@ def get_all_notifications(skip,limit):
     notifications = get_notifications_sorted_by_date(current_user.id)
     user_notifications = notifications.skip(skip).limit(limit)
     return [notification.notif_json for notification in user_notifications]
+
+def get_all_people():
+    people = FakeBookUser.objects.filter(id__ne=current_user.id)
+    return [person.json for person in people]

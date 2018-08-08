@@ -102,8 +102,8 @@ function FindFriendsController($scope,$http,socket,Notification){
             url: '/api/friend-request',
             data: data
         }).then(function result(response) {
-            console.log(response.data);
             if(response.data.success) {
+                vm.people = response.data.friends;
                 Notification.success({message: response.data.message, delay: 1000, positionY: 'bottom', positionX: 'right'});
             }
             else {

@@ -118,11 +118,11 @@
 								<p class="hidden-lg hidden-md">Dashboard</p>
                             </a>
                         </li>
-                        <li class="dropdown">
+                        <li class="dropdown" ng-controller="NotificationController as vm">
                               <a href="#" class="dropdown-toggle" data-toggle="dropdown">
                                     <i class="fa fa-globe"></i>
                                     <b class="caret hidden-lg hidden-md"></b>
-                                    <span ng-if="vm.unreadNotifCount" class="notification hidden-sm hidden-xs">[[ vm.unreadNotifCount ]]</span>
+                                    <span ng-if="vm.unreadNotifCount" class="notification hidden-sm hidden-xs" data-ng-bind="[[ vm.unreadNotifCount ]]"></span>
 									<p class="hidden-lg hidden-md">
 										<b class="caret"></b>
 									</p>

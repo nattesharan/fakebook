@@ -31,6 +31,16 @@ function FakebookController($scope,socket) {
     }
 }
 
+angular.module('fakebook').controller('NotificationController', NotificationController);
+NotificationController.$inject = ['socket','$http'];
+function NotificationController(socket,$http) {
+    var vm = this;
+    vm.notifications = {}
+    vm.showNotifications = showNotifications;
+    function showNotifications(notifications) {
+        console.log(notifications);
+    }
+}
 angular.module('fakebook').controller('FindFriendsController', FindFriendsController);
 FindFriendsController.$inject = ['$scope','$http','socket','Notification'];
 

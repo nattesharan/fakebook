@@ -116,11 +116,11 @@
 }
 
 .show-online-window:hover {
-    max-height: 515px;
     overflow-y: auto;
 }
 .show-online-window {
     max-height: 515px;
+    max-height: 495px;
     overflow-y: hidden;
 }
 
@@ -141,6 +141,16 @@
 
 .notif-home {
     width: 75%;
+    min-height: 605px;
     margin-left: 0%;
     padding-left: 0;
+}
+
+.notifications-content {
+    height: 514px;
+    overflow-y: hidden;
+}
+
+.notifications-content:hover {
+    overflow-y: auto;
 }

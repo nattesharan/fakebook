@@ -2,6 +2,7 @@ from werkzeug.security import generate_password_hash,check_password_hash
 from mongoengine import Document,StringField,DoesNotExist,ListField,BooleanField,ReferenceField,DateTimeField
 from flask_login import UserMixin,current_user
 import mongoengine
+import datetime
 class FakeBookUser(Document,UserMixin):
     email = StringField(max_length=128,required=True)
     password = StringField(max_length=128,required=True)
@@ -67,6 +68,7 @@ class FakebookNotification(Document):
 
     def mark_as_read(self):
         self.is_read = True
+        self.read_at = datetime.datetime.now()
         self.save()
         return self.notif_json
 
@@ -84,5 +86,7 @@ class FakebookNotification(Document):
         return {
             'message': self.notification_message,
             'is_read': self.is_read,
-            'id': str(self.id)
+            'id': str(self.id),
+            'image': self.initiated_by.image,
+            'name': self.initiated_by.name
         }

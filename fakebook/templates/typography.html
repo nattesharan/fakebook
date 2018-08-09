@@ -7,32 +7,29 @@
                     <h4 class="title">Notifications</h4>
                     <p class="category">All notifications</p>
                 </div>
-                <div class="content" infinite-scroll='vm.loadNextPageNotifications()' infinite-scroll-disabled='vm.busy'>
-                    <div class="typo-line" ng-repeat="notification in vm.notifications">
-                        <p class="category">Quote</p>
-                        <blockquote>
-                            <p>
-                                Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna
-                                aliquam erat volutpat. Ut wisi enim ad minim veniam.
-                            </p>
-                            <small>
-                                Steve Jobs, CEO Apple
-                            </small>
-                        </blockquote>
-                    </div>
-                    <div ng-show='vm.busy && !vm.endOfPage'>
-                        <div layout="row" layout-sm="column" layout-align="space-around" style="margin-bottom:30px">
-                            <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                <md-content>
+                    <md-list infinite-scroll='vm.loadNextPageNotifications()' infinite-scroll-disabled='vm.busy'>
+                        <md-list-item class="md-3-line" ng-repeat="notification in vm.notifications">
+                        <img ng-src="[[notification.image]]" class="md-avatar" alt="">
+                        <div class="md-list-item-text">
+                            <h3>[[ notification.name ]]</h3>
+                            <p>[[ notification.message ]]</p>
                         </div>
-                    </div>
-                    <div ng-show="vm.endOfPage">
-                            <div class="typo-line">
-                                <center>
-                                    <h2>You have read all the Notifications</h2>
-                                </center>
+                        </md-list-item>
+                        <div ng-show='vm.busy && !vm.endOfPage'>
+                                <div layout="row" layout-sm="column" layout-align="space-around" style="margin-bottom:30px">
+                                    <md-progress-circular md-mode="indeterminate"></md-progress-circular>
+                                </div>
                             </div>
-                    </div>
-                </div>
+                            <div ng-show="vm.endOfPage">
+                                    <div class="typo-line">
+                                        <center>
+                                            <h2>You have read all the Notifications</h2>
+                                        </center>
+                                    </div>
+                            </div>
+                    <md-list>                               
+                </md-content>
             </div>
         </div>
 

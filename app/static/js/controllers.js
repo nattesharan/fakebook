@@ -219,6 +219,7 @@ function UserNotificationsController($http,socket) {
             }
         }).then(function result(response) {
             vm.busy = false;
+            console.log(response.data.notifications);
             response.data.notifications.forEach(notification => {
                 vm.notifications.push(notification);
             });

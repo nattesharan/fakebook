@@ -3,7 +3,7 @@
 {% block fakebook_content %}
 <div class="container-fluid" ng-controller="DashboardController as vm" ng-init="vm.test()">
     <div class="row">
-        <div class="col-md-8">
+        <div class="col-md-8 dashboard-container">
             <div class="card">
                 <div class="header">
                     <h4 class="title">Users Behavior</h4>
@@ -105,7 +105,7 @@
                                 </div>
                             </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 online-window">
                 <div class="card">
     
                     <div class="header">
@@ -186,7 +186,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+        </div>
     </div>
 </div>
 {% endblock %}

@@ -122,3 +122,13 @@
     max-height: 515px;
     overflow-y: hidden;
 }
+
+.online-window {
+    position: fixed;
+    margin-left: 58%;
+    padding-right: 10%;
+}
+
+.dashboard-container {
+    width: 74%;
+}

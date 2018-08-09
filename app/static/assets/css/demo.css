@@ -97,6 +97,7 @@
 
 .main-body {
     background-color: #F3F3F4;
+    margin-left: 0px !important;
 }
 
 .show-online-window::-webkit-scrollbar {
@@ -131,4 +132,15 @@
 
 .dashboard-container {
     width: 74%;
+}
+
+.fakebook-content {
+    width: 100%;
+    margin-top: 2%;
+}
+
+.notif-home {
+    width: 75%;
+    margin-left: 0%;
+    padding-left: 0;
 }

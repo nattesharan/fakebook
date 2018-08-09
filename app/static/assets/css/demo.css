@@ -93,4 +93,32 @@
 
 .default-show-all {
     background-color: white !important;
+} 
+
+.main-body {
+    background-color: #F3F3F4;
+}
+
+.show-online-window::-webkit-scrollbar {
+    width: 10px;
+	background-color: #F5F5F5;
+}
+.show-online-window::-webkit-scrollbar-thumb {
+	border-radius: 10px;
+	background-color: #FFF;
+	background-image: -webkit-gradient(linear,
+									   40% 0%,
+									   75% 84%,
+									   from(blueviolet),
+									   to(blueviolet),
+                                       color-stop(.6,blueviolet))
+}
+
+.show-online-window:hover {
+    max-height: 515px;
+    overflow-y: auto;
+}
+.show-online-window {
+    max-height: 515px;
+    overflow-y: hidden;
 }

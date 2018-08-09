@@ -57,6 +57,15 @@ class FakeBookUser(Document,UserMixin):
             'image': self.image,
             'status': self.get_current_user_status()
         }
+    
+    @property
+    def online_json(self):
+        return {
+            'name': self.name,
+            'email': self.email,
+            'image': self.image,
+            'is_online': self.is_online
+        }
 
 class FakebookNotification(Document):
     notification_type = StringField(max_length=20,required=True)

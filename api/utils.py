@@ -28,3 +28,14 @@ def get_all_notifications(skip,limit):
 def get_all_people():
     people = FakeBookUser.objects.filter(id__ne=current_user.id)
     return [person.json for person in people]
+
+def get_all_online_friends(user):
+    friends = [friend.id for friend in user.friends]
+    if friends:
+        return FakeBookUser.objects.filter(is_online=True,id__in=friends)
+    else:
+        return []
+
+def get_all_online_friends_json():
+    online_users = get_all_online_friends(current_user)
+    return [user.online_json for user in online_users]

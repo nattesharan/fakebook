@@ -4,8 +4,9 @@ import requests
 from flask_login import login_required,current_user
 from app.settings import NOTIFICATION_TYPES
 from fakebook.models import FakeBookUser,FakebookNotification
-from utils import create_notification, get_notifications_for_dashboard, get_all_notifications, get_all_people
-from app import notify_user,update_friends_list_for_receiver
+from utils import create_notification, get_notifications_for_dashboard, get_all_notifications,\
+                        get_all_people,get_all_online_friends_json
+from app import notify_user,update_friends_list_for_receiver,refresh_online_friends
 class FriendRequestHandler(Resource):
     @login_required
     def post(self):
@@ -71,19 +72,26 @@ class FriendRequestHandler(Resource):
         accepting_user = FakeBookUser.objects.get(id=current_user.id)
         sending_user = FakeBookUser.objects.get(id=data['person_id'])
         if accepting_user in sending_user.sent_friend_requests:
-            accepting_user.received_friend_requests.remove(sending_user)
-            accepting_user.friends.append(sending_user)
-            sending_user.sent_friend_requests.remove(accepting_user)
-            sending_user.friends.append(accepting_user)
-            accepting_user.save()
-            sending_user.save()
-            notification = create_notification(NOTIFICATION_TYPES['ACCEPT_REQUEST'],sending_user)
-            notify_user(str(sending_user.id))
-            update_friends_list_for_receiver(str(sending_user.id))
-            return jsonify({
-                'success': True,
-                'message': 'You are now friends with {}'.format(sending_user.name)
-            })
+            try:
+                accepting_user.received_friend_requests.remove(sending_user)
+                accepting_user.friends.append(sending_user)
+                sending_user.sent_friend_requests.remove(accepting_user)
+                sending_user.friends.append(accepting_user)
+                accepting_user.save()
+                sending_user.save()
+                notification = create_notification(NOTIFICATION_TYPES['ACCEPT_REQUEST'],sending_user)
+                notify_user(str(sending_user.id))
+                update_friends_list_for_receiver(str(sending_user.id))
+                return jsonify({
+                    'success': True,
+                    'message': 'You are now friends with {}'.format(sending_user.name)
+                })
+            except Exception as E:
+                print E
+            finally:
+                if sending_user.is_online:
+                    refresh_online_friends(str(sending_user.id))
+                    refresh_online_friends(str(accepting_user.id))
         elif sending_user in accepting_user.friends:
             return jsonify({
                 'success': False,
@@ -135,18 +143,33 @@ class FriendsHandler(Resource):
         user = FakeBookUser.objects.get(id=current_user.id)
         friend = FakeBookUser.objects.get(id=data['person_id'])
         if user in friend.friends:
-            user.friends.remove(friend)
-            friend.friends.remove(user)
-            user.save()
-            friend.save()
-            update_friends_list_for_receiver(str(friend.id))
-            return jsonify({
-                'success': True,
-                'friends': get_all_people(),
-                'message': 'Successfully unfriended'
-            })
+            try:
+                user.friends.remove(friend)
+                friend.friends.remove(user)
+                user.save()
+                friend.save()
+                update_friends_list_for_receiver(str(friend.id))
+                return jsonify({
+                    'success': True,
+                    'friends': get_all_people(),
+                    'message': 'Successfully unfriended'
+                })
+            except Exception as E:
+                print E
+            finally:
+                if friend.is_online:
+                    refresh_online_friends(str(friend.id))
+                    refresh_online_friends(str(user.id))
         else:
             return jsonify({
                 'success': False,
                 'message': 'Not friends Yet'
             })
+
+class OnlineFriendsHandler(Resource):
+    @login_required
+    def get(self):
+        online_friends = get_all_online_friends_json()
+        return jsonify({
+            'online_friends': online_friends 
+        })

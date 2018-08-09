@@ -5,7 +5,7 @@ def get_id_from_rooms(rooms):
         try:
             return ObjectId(room)
         except:
-            print "This is room id"
+            pass
 
 def get_active_user_ids():
     active_users = FakeBookUser.objects.filter(is_online=True).only('id')

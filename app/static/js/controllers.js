@@ -219,7 +219,6 @@ function UserNotificationsController($http,socket) {
             }
         }).then(function result(response) {
             vm.busy = false;
-            console.log(response.data.notifications);
             response.data.notifications.forEach(notification => {
                 vm.notifications.push(notification);
             });
@@ -229,4 +228,27 @@ function UserNotificationsController($http,socket) {
             vm.skip += vm.limit;
         });
     }
+}
+
+angular.module('fakebook').controller('OnlineWindowController', OnlineWindowController);
+OnlineWindowController.$inject = ['$http','socket'];
+
+function OnlineWindowController($http,socket) {
+    var vm = this;
+    vm.onlineUsers = [];
+    vm.headlines = []
+    vm.fetchOnlineUsers = fetchOnlineUsers;
+    
+    function fetchOnlineUsers() {
+        $http({
+            method: 'GET',
+            url: '/api/online-users'
+        }).then(function result(response) {
+            vm.onlineUsers = response.data.online_friends;
+        });
+    }
+
+    socket.on('refresh_online_friends',function() {
+        fetchOnlineUsers();
+    });
 }

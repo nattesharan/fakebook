@@ -238,7 +238,14 @@ function OnlineWindowController($http,socket) {
     vm.onlineUsers = [];
     vm.headlines = []
     vm.fetchOnlineUsers = fetchOnlineUsers;
-    
+    vm.showChatWindow = showChatWindow;
+    vm.closeChatWindow = closeChatWindow;
+
+    function closeChatWindow() {
+        console.log('clicked mee--------------');
+        var myEl = angular.element(document.querySelector('#qnimate'));
+        myEl.removeClass('popup-box-on');
+    }
     function fetchOnlineUsers() {
         $http({
             method: 'GET',
@@ -251,4 +258,9 @@ function OnlineWindowController($http,socket) {
     socket.on('refresh_online_friends',function() {
         fetchOnlineUsers();
     });
+
+    function showChatWindow(id) {
+        var myEl = angular.element(document.querySelector('#qnimate'));
+        myEl.addClass('popup-box-on');
+    };
 }

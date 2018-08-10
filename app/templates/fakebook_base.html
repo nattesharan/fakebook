@@ -13,7 +13,7 @@
 
     <!-- Bootstrap core CSS     -->
     <link href="../static/assets/css/bootstrap.min.css" rel="stylesheet" />
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <link href="../static/assets/css/bootstrap3.min.css" rel="stylesheet" id="bootstrap-css">
     <!-- Animation library for notifications   -->
     <link href="../static/assets/css/animate.min.css" rel="stylesheet"/>
 
@@ -22,6 +22,7 @@
 
     <link rel="stylesheet" href="../static/assets/css/angular-material.min.css"/>
     <link rel="stylesheet" href="../static/assets/css/angular-ui-notification.min.css"/>
+    <link rel="stylesheet" href="../static/assets/css/bootstrap-glyph.min.css"/>
     <!--  CSS for Demo Purpose, don't include it in your project     -->
     <link href="../static/assets/css/demo.css" rel="stylesheet" />
     <link href="../static/css/chat_box.css" rel="stylesheet" />
@@ -193,7 +194,7 @@
                         <div class="content">
                             <md-content class="show-online-window">
                                 <md-list ng-show="vm.onlineUsers.length">
-                                    <md-list-item class="md-3-line" ng-repeat="onlineUser in vm.onlineUsers">
+                                    <md-list-item class="md-3-line online-user" ng-repeat="onlineUser in vm.onlineUsers" ng-click="vm.showChatWindow(onlineUser.id)">
                                     <img ng-src="[[ onlineUser.image ]]" class="md-avatar" alt="">
                                     <div class="md-list-item-text">
                                         <h3>[[ onlineUser.name ]]&nbsp;&nbsp;<i class="fa fa-circle" ng-if="onlineUser.is_online" style="color:rgb(66, 183, 42)" aria-hidden="true"></i></h3>
@@ -247,15 +248,14 @@
                             </li>
                         </ul>
                     </div>
-    
-                    <button data-widget="remove" id="removeClass" class="chat-header-button pull-right" type="button">
+                    <button ng-click="vm.closeChatWindow()" data-widget="remove" id="removeClass" class="chat-header-button pull-right" type="button">
                         <i class="glyphicon glyphicon-off"></i>
                     </button>
                 </div>
             </div>
-            <div class="popup-messages">
+            <div class="popup-messages chat-messages-container">
                 <div class="chat_box touchscroll chat_box_colors_a">
-                    <div class="chat_message_wrapper">
+                    <div class="chat_message_wrapper message-wrapper">
                         <div class="chat_user_avatar">
                             <a href="https://web.facebook.com/iamgurdeeposahan" target="_blank" >
                             <img alt="Gurdeep Osahan (Web Designer)" title="Gurdeep Osahan (Web Designer)"  src="http://webncc.in/img/user/gurdeep-singh-osahan.jpg" class="md-user-image">
@@ -270,7 +270,7 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="chat_message_wrapper chat_message_right">
+                    <div class="chat_message_wrapper chat_message_right message-wrapper">
                         <div class="chat_user_avatar">
                         <a href="https://web.facebook.com/iamgurdeeposahan" target="_blank" >
                             <img alt="Gurdeep Osahan (Web Designer)" title="Gurdeep Osahan (Web Designer)" src="http://bootsnipp.com/img/avatars/bcf1c0d13e5500875fdd5a7e8ad9752ee16e7462.jpg" class="md-user-image">
@@ -285,7 +285,7 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="chat_message_wrapper">
+                    <div class="chat_message_wrapper message-wrapper">
                         <div class="chat_user_avatar">
                         <a href="https://web.facebook.com/iamgurdeeposahan" target="_blank" >
                             <img alt="Gurdeep Osahan (Web Designer)" title="Gurdeep Osahan (Web Designer)" src="http://webncc.in/img/user/gurdeep-singh-osahan.jpg" class="md-user-image">
@@ -300,7 +300,7 @@
                             </li>
                         </ul>
                     </div>
-                    <div class="chat_message_wrapper chat_message_right">
+                    <div class="chat_message_wrapper chat_message_right message-wrapper">
                         <div class="chat_user_avatar">
                         <a href="https://web.facebook.com/iamgurdeeposahan" target="_blank" >
                             <img alt="Gurdeep Osahan (Web Designer)" title="Gurdeep Osahan (Web Designer)" src="http://bootsnipp.com/img/avatars/bcf1c0d13e5500875fdd5a7e8ad9752ee16e7462.jpg" class="md-user-image">
@@ -390,8 +390,8 @@
     <script src="../static/assets/js/angular-ui-notification.min.js" type="text/javascript"></script>
     <script src="../static/assets/js/ng-infinite-scroll.min.js" type="text/javascript"></script>
     
-    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+    <script src="../static/assets/js/jquery-1.11.1.min.js"></script>
+    <script src="../static/assets/js/bootstrap3.min.js"></script>
 	<!--  Charts Plugin -->
 	<script src="../static/assets/js/chartist.min.js"></script>
 
@@ -412,14 +412,9 @@
 
 	<script type="text/javascript">
     	$(document).ready(function(){
-            $("#addClass").click(function () {
-                console.log('called');
-                $('#qnimate').addClass('popup-box-on');
-                  });
-                
-                  $("#removeClass").click(function () {
+            $("#removeClass").click(function () {
                 $('#qnimate').removeClass('popup-box-on');
-                  });
+            });
             demo.initChartist();
         	$.notify({
             	icon: 'pe-7s-gift',

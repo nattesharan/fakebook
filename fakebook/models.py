@@ -61,6 +61,7 @@ class FakeBookUser(Document,UserMixin):
     @property
     def online_json(self):
         return {
+            'id': str(self.id),
             'name': self.name,
             'email': self.email,
             'image': self.image,

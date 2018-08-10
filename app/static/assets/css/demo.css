@@ -154,3 +154,16 @@
 .notifications-content:hover {
     overflow-y: auto;
 }
+
+.online-user:hover {
+    cursor: pointer;
+}
+
+.chat-messages-container {
+    transform: rotate(180deg);
+    direction: rtl;
+}
+.message-wrapper {
+    transform: rotate(180deg);
+    direction: ltr;
+}

@@ -476,6 +476,7 @@ img {
 .chat_box.chat_box_colors_a .chat_message_wrapper ul.chat_message > li {
     background: #FCFBF6 none repeat scroll 0 0;
     color: #000000;
+    margin-bottom: 5px;
 }
 .open-btn {
     border: 2px solid #189d0e;

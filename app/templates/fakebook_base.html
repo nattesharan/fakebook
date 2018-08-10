@@ -13,7 +13,7 @@
 
     <!-- Bootstrap core CSS     -->
     <link href="../static/assets/css/bootstrap.min.css" rel="stylesheet" />
-
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <!-- Animation library for notifications   -->
     <link href="../static/assets/css/animate.min.css" rel="stylesheet"/>
 
@@ -24,7 +24,7 @@
     <link rel="stylesheet" href="../static/assets/css/angular-ui-notification.min.css"/>
     <!--  CSS for Demo Purpose, don't include it in your project     -->
     <link href="../static/assets/css/demo.css" rel="stylesheet" />
-
+    <link href="../static/css/chat_box.css" rel="stylesheet" />
 
     <!--     Fonts and icons     -->
     <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
@@ -207,6 +207,10 @@
                                         <h4 class="title">No Friends Online</h4>
                                     </center>
                                     <p class="category">We will notify you when your friends come online</p>
+                                    <div class="round hollow text-center">
+                                        <a href="#" id="addClass">
+                                            <span class="glyphicon glyphicon-comment"></span> Open in chat </a>
+                                    </div>
                                 </md-list>
                             </md-content>
                             <div class="footer">
@@ -219,7 +223,130 @@
                     </div>
             </div>
         </div>
-        
+        <div class="popup-box chat-popup" id="qnimate">
+            <div class="popup-head">
+                <div class="popup-head-left pull-left">
+                    <img src="http://bootsnipp.com/img/avatars/bcf1c0d13e5500875fdd5a7e8ad9752ee16e7462.jpg" alt="iamgurdeeposahan"> Gurdeep Osahan</div>
+                <div class="popup-head-right pull-right">
+                    <div class="btn-group">
+                        <button class="chat-header-button" data-toggle="dropdown" type="button" aria-expanded="false">
+                            <i class="glyphicon glyphicon-cog"></i>
+                        </button>
+                        <ul role="menu" class="dropdown-menu pull-right">
+                            <li>
+                                <a href="#">Media</a>
+                            </li>
+                            <li>
+                                <a href="#">Block</a>
+                            </li>
+                            <li>
+                                <a href="#">Clear Chat</a>
+                            </li>
+                            <li>
+                                <a href="#">Email Chat</a>
+                            </li>
+                        </ul>
+                    </div>
+    
+                    <button data-widget="remove" id="removeClass" class="chat-header-button pull-right" type="button">
+                        <i class="glyphicon glyphicon-off"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="popup-messages">
+                <div class="direct-chat-messages">    
+                    <div class="chat-box-single-line">
+                        <abbr class="timestamp">October 8th, 2015</abbr>
+                    </div>
+    
+    
+                    <!-- Message. Default to the left -->
+                    <div class="direct-chat-msg doted-border">
+                        <div class="direct-chat-info clearfix">
+                            <span class="direct-chat-name pull-left">Osahan</span>
+                        </div>
+                        <!-- /.direct-chat-info -->
+                        <img alt="message user image" src="http://bootsnipp.com/img/avatars/bcf1c0d13e5500875fdd5a7e8ad9752ee16e7462.jpg" class="direct-chat-img">
+                        <!-- /.direct-chat-img -->
+                        <div class="direct-chat-text">
+                            Hey bro, how’s everything going ?
+                        </div>
+                        <div class="direct-chat-info clearfix">
+                            <span class="direct-chat-timestamp pull-right">3.36 PM</span>
+                        </div>
+                        <div class="direct-chat-info clearfix">
+                            <span class="direct-chat-img-reply-small pull-left">
+    
+                            </span>
+                            <span class="direct-chat-reply-name">Singh</span>
+                        </div>
+                        <!-- /.direct-chat-text -->
+                    </div>
+                    <!-- /.direct-chat-msg -->
+    
+    
+                    <div class="chat-box-single-line">
+                        <abbr class="timestamp">October 9th, 2015</abbr>
+                    </div>
+    
+    
+    
+                    <!-- Message. Default to the left -->
+                    <div class="direct-chat-msg doted-border">
+                        <div class="direct-chat-info clearfix">
+                            <span class="direct-chat-name pull-left">Osahan</span>
+                        </div>
+                        <!-- /.direct-chat-info -->
+                        <img alt="iamgurdeeposahan" src="http://bootsnipp.com/img/avatars/bcf1c0d13e5500875fdd5a7e8ad9752ee16e7462.jpg" class="direct-chat-img">
+                        <!-- /.direct-chat-img -->
+                        <div class="direct-chat-text">
+                            Hey bro, how’s everything going ?
+                        </div>
+                        <div class="direct-chat-info clearfix">
+                            <span class="direct-chat-timestamp pull-right">3.36 PM</span>
+                        </div>
+                        <div class="direct-chat-info clearfix">
+                            <img alt="iamgurdeeposahan" src="http://bootsnipp.com/img/avatars/bcf1c0d13e5500875fdd5a7e8ad9752ee16e7462.jpg" class="direct-chat-img big-round">
+                            <span class="direct-chat-reply-name">Singh</span>
+                        </div>
+                        <!-- /.direct-chat-text -->
+                    </div>
+                    <!-- /.direct-chat-msg -->
+    
+    
+    
+    
+    
+    
+                </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+            </div>
+            <div class="popup-messages-footer">
+                <textarea id="status_message" placeholder="Type a message..." rows="10" cols="40" name="message"></textarea>
+                <div class="btn-footer">
+                    <button class="bg_none">
+                        <i class="glyphicon glyphicon-film"></i>
+                    </button>
+                    <button class="bg_none">
+                        <i class="glyphicon glyphicon-camera"></i>
+                    </button>
+                    <button class="bg_none">
+                        <i class="glyphicon glyphicon-paperclip"></i>
+                    </button>
+                    <button class="bg_none pull-right">
+                        <i class="glyphicon glyphicon-thumbs-up"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
 
 
         <footer class="footer">
@@ -271,6 +398,9 @@
     <script src="../static/assets/js/angular-material.min.js" type="text/javascript"></script>
     <script src="../static/assets/js/angular-ui-notification.min.js" type="text/javascript"></script>
     <script src="../static/assets/js/ng-infinite-scroll.min.js" type="text/javascript"></script>
+    
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
 	<!--  Charts Plugin -->
 	<script src="../static/assets/js/chartist.min.js"></script>
 
@@ -291,7 +421,14 @@
 
 	<script type="text/javascript">
     	$(document).ready(function(){
-
+            $("#addClass").click(function () {
+                console.log('called');
+                $('#qnimate').addClass('popup-box-on');
+                  });
+                
+                  $("#removeClass").click(function () {
+                $('#qnimate').removeClass('popup-box-on');
+                  });
             demo.initChartist();
         	$.notify({
             	icon: 'pe-7s-gift',

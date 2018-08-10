@@ -167,3 +167,7 @@
     transform: rotate(180deg);
     direction: ltr;
 }
+
+.message-area {
+    height: 50px !important;
+}

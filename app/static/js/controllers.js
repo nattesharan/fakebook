@@ -236,16 +236,10 @@ OnlineWindowController.$inject = ['$http','socket'];
 function OnlineWindowController($http,socket) {
     var vm = this;
     vm.onlineUsers = [];
-    vm.headlines = []
+    vm.headlines = [];
     vm.fetchOnlineUsers = fetchOnlineUsers;
     vm.showChatWindow = showChatWindow;
-    vm.closeChatWindow = closeChatWindow;
-
-    function closeChatWindow() {
-        console.log('clicked mee--------------');
-        var myEl = angular.element(document.querySelector('#qnimate'));
-        myEl.removeClass('popup-box-on');
-    }
+    vm.messages = [];
     function fetchOnlineUsers() {
         $http({
             method: 'GET',

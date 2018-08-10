@@ -12,6 +12,7 @@ class FakeBookUser(Document,UserMixin):
     friends = ListField(ReferenceField('FakeBookUser',reverse_delete_rule=mongoengine.CASCADE))
     sent_friend_requests = ListField(ReferenceField('FakeBookUser',reverse_delete_rule=mongoengine.CASCADE))
     received_friend_requests = ListField(ReferenceField('FakeBookUser',reverse_delete_rule=mongoengine.CASCADE))
+    chats = ListField(ReferenceField('FakeBookChat',reverse_delete_rule=mongoengine.CASCADE))
     is_online = BooleanField(default=False)
     
     def set_password(self,password):
@@ -100,3 +101,15 @@ class FakebookNotification(Document):
             'image': self.initiated_by.image,
             'name': self.initiated_by.name
         }
+
+class FakeBookMessages(Document):
+    message_text = StringField(max_length=1024,required=True)
+    sent_by = ReferenceField(FakeBookUser)
+    sent_to = ReferenceField(FakeBookUser)
+    read_on = DateTimeField()
+
+class FakeBookChat(Document):
+    chat_created_on = DateTimeField(default=datetime.datetime.now())
+    chat_initiated_by = ReferenceField(FakeBookUser)
+    chat_initiated_for = ReferenceField(FakeBookUser)
+    messages = ReferenceField(FakeBookMessages,reverse_delete_rule=mongoengine.CASCADE)

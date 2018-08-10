@@ -11,8 +11,8 @@ body
     display: none;
     height: 415px;
     position: fixed;
-    right: 70px;
-    width: 25%;
+    right: 22%;
+    width: 26%;
     font-family: 'Open Sans', sans-serif;
 }
 .round.hollow {
@@ -43,7 +43,6 @@ body
 .popup-box .popup-head {
     background-color: #fff;
     clear: both;
-    color: #7b7b7b;
     display: inline-table;
     font-size: 21px;
     padding: 7px 10px;

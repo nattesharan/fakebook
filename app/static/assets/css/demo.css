@@ -171,3 +171,9 @@
 .message-area {
     height: 50px !important;
 }
+
+.show-typing-status {
+    font-size: 15px !important;
+    padding-top: 5px !important;
+}
+

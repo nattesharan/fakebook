@@ -220,33 +220,38 @@
                     </div>
                     <div class="popup-box chat-popup" id="qnimate">
                             <div class="popup-head">
-                                <div class="popup-head-left pull-left">
-                                    <img ng-src="[[ vm.chatUser.image ]]" alt="[[ vm.chatUser.name ]]">&nbsp;&nbsp;[[ vm.chatUser.name ]]&nbsp;&nbsp;<i class="fa fa-circle" ng-if="vm.chatUser.is_online" style="color:rgb(66, 183, 42)" aria-hidden="true"></i></div>
-                                <div class="popup-head-right pull-right">
-                                    <div class="btn-group">
-                                        <button class="chat-header-button" data-toggle="dropdown" type="button" aria-expanded="false">
-                                            <i class="glyphicon glyphicon-cog"></i>
-                                        </button>
-                                        <ul role="menu" class="dropdown-menu pull-right">
-                                            <li>
-                                                <a href="#">Media</a>
-                                            </li>
-                                            <li>
-                                                <a href="#">Block</a>
-                                            </li>
-                                            <li>
-                                                <a href="#">Clear Chat</a>
-                                            </li>
-                                            <li>
-                                                <a href="#">Email Chat</a>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    <button ng-click="vm.closeChatWindow()" data-widget="remove" id="removeClass" class="chat-header-button pull-right" type="button">
-                                        <i class="glyphicon glyphicon-off"></i>
-                                    </button>
+                                    <div class="popup-head-left pull-left">
+                                        <a href="#">
+                                        <img class="md-user-image" ng-src="[[ vm.chatUser.image ]]" alt="[[ vm.chatUser.name ]]">
+                                        <h1>[[ vm.chatUser.name ]]&nbsp;<i class="fa fa-circle" ng-if="vm.chatUser.is_online" style="color:rgb(66, 183, 42)" aria-hidden="true"></i></h1>
+                                        <small class="show-typing-status"><br><span aria-hidden="true"></span>typing</small>
+                                    </a>
                                 </div>
-                            </div>
+                                        <div class="popup-head-right pull-right">
+                                                <div class="btn-group">
+                                                    <button class="chat-header-button" data-toggle="dropdown" type="button" aria-expanded="false">
+                                                        <i class="glyphicon glyphicon-cog"></i>
+                                                    </button>
+                                                    <ul role="menu" class="dropdown-menu pull-right">
+                                                        <li>
+                                                            <a href="#">Media</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#">Block</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#">Clear Chat</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="#">Email Chat</a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <button ng-click="vm.closeChatWindow()" data-widget="remove" id="removeClass" class="chat-header-button pull-right" type="button">
+                                                    <i class="glyphicon glyphicon-off"></i>
+                                                </button>
+                                            </div>
+                                  </div>
                             <div class="popup-messages chat-messages-container">
                                 <div class="chat_box touchscroll chat_box_colors_a" id="chat-messages-div">
                                     <div class="chat_message_wrapper message-wrapper" ng-repeat="message in vm.messages" ng-class="(message.sent_by_me) ? 'chat_message_right' : ''">

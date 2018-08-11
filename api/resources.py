@@ -180,8 +180,12 @@ class MessagesHandler(Resource):
     def get(self):
         me = current_user.id
         friend = FakeBookUser.objects.get(id=request.args.get('friend_id')).id
-        chat = FakeBookChat.get_or_create_chat(me,friend)
-        messages = [message.json for message in chat.messages]
+        chat,status = FakeBookChat.get_chat(me,friend)
+        if status:
+            messages = [message.json for message in chat.messages]
+            return jsonify({
+                'messages': messages
+            })
         return jsonify({
-            'messages': messages
+            'messages': []
         })

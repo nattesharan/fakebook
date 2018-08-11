@@ -159,3 +159,12 @@ class FakeBookChat(Document):
             receiver.chats.append(chat.chat_id)
             receiver.save()
             return chat
+    
+    @classmethod
+    def get_chat(cls,sender,receiver):
+        friends = [sender,receiver]
+        try:
+            chat = cls.objects.get(chat_initiated_by__in=friends,chat_initiated_for__in=friends)
+            return chat,True
+        except DoesNotExist:
+            return None,False

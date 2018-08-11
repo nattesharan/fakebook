@@ -239,7 +239,15 @@ function OnlineWindowController($http,socket) {
     vm.headlines = [];
     vm.fetchOnlineUsers = fetchOnlineUsers;
     vm.showChatWindow = showChatWindow;
+    vm.closeChatWindow = closeChatWindow;
     vm.messages = [];
+    vm.chatUser = {};
+
+    function closeChatWindow() {
+        var myEl = angular.element(document.querySelector('#qnimate'));
+        myEl.removeClass('popup-box-on');
+    }
+    
     function fetchOnlineUsers() {
         $http({
             method: 'GET',
@@ -253,8 +261,10 @@ function OnlineWindowController($http,socket) {
         fetchOnlineUsers();
     });
 
-    function showChatWindow(id) {
+    function showChatWindow(onlineUser) {
         var myEl = angular.element(document.querySelector('#qnimate'));
         myEl.addClass('popup-box-on');
+        vm.chatUser = onlineUser;
+        console.log(vm.chatUser);
     };
 }

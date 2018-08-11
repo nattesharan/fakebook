@@ -43,4 +43,6 @@ def send_message(data):
     message = FakeBookMessages.new_message(data['message'],sender,receiver)
     chat.messages.insert(0,message)
     chat.save()
-    # print message
+    if receiver.is_online:
+        emit('new_message',room=str(receiver.id))
+    emit('refresh_sender',room=str(sender.id))

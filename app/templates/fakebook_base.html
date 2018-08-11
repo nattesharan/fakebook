@@ -248,12 +248,11 @@
                                 </div>
                             </div>
                             <div class="popup-messages chat-messages-container">
-                                <div class="chat_box touchscroll chat_box_colors_a">
+                                <div class="chat_box touchscroll chat_box_colors_a" id="chat-messages-div">
                                     <div class="chat_message_wrapper message-wrapper" ng-repeat="message in vm.messages" ng-class="(message.sent_by_me) ? 'chat_message_right' : ''">
                                         <div class="chat_user_avatar">
                                             <img ng-show="message.sent_by_me" ng-src="[[vm.me.image]]" class="md-user-image">
                                             <img ng-hide="message.sent_by_me" ng-src="[[vm.chatUser.image]]" class="md-user-image">
-                                            </a>
                                         </div>
                                         <ul class="chat_message">
                                             <li>

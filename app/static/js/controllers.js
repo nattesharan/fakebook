@@ -255,7 +255,6 @@ function OnlineWindowController($http,socket) {
                 }
             }).then(function result(response) {
                 vm.messages = response.data.messages;
-                console.log(vm.messages);
             });
         }
     }
@@ -267,7 +266,6 @@ function OnlineWindowController($http,socket) {
         socket.emit('send_message',data);
     }
     function typingMessage(event) {
-        console.log("called");
         var key = event.which || event.keyCode;
         if(key===13) {
             event.preventDefault();
@@ -296,7 +294,13 @@ function OnlineWindowController($http,socket) {
     socket.on('refresh_online_friends',function() {
         fetchOnlineUsers();
     });
+    socket.on('new_message',function() {
+        fetchCurrentChatMessages(vm.chatUser.id);
+    });
 
+    socket.on('refresh_sender',function() {
+        fetchCurrentChatMessages(vm.chatUser.id);
+    });
     function showChatWindow(onlineUser) {
         var myEl = angular.element(document.querySelector('#qnimate'));
         myEl.addClass('popup-box-on');

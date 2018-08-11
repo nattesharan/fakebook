@@ -59,7 +59,13 @@ class FakeBookUser(Document,UserMixin):
             'image': self.image,
             'status': self.get_current_user_status()
         }
-    
+    @property
+    def my_json(self):
+        return {
+            'id': str(self.id),
+            'name': self.name,
+            'image': self.image,
+        }
     @property
     def online_json(self):
         return {
@@ -119,6 +125,12 @@ class FakeBookMessages(Document):
             sent_by = sender,
             sent_to = receiver
         )
+    @property
+    def json(self):
+        return {
+            'message': self.message_text,
+            'sent_by_me': self.sent_by.id == current_user.id
+        }
 
 class FakeBookChat(Document):
     chat_id = StringField(required=True)

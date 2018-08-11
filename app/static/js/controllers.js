@@ -239,11 +239,26 @@ function OnlineWindowController($http,socket) {
     vm.messages = [];
     vm.message = '';
     vm.chatUser = {};
+    vm.me = {};
     vm.fetchOnlineUsers = fetchOnlineUsers;
     vm.showChatWindow = showChatWindow;
     vm.closeChatWindow = closeChatWindow;
     vm.typingMessage = typingMessage;
-    
+
+    function fetchCurrentChatMessages(chat_user_id) {
+        if(chat_user_id) {
+            $http({
+                method: 'GET',
+                url: '/api/messages',
+                params: {
+                    'friend_id': chat_user_id
+                }
+            }).then(function result(response) {
+                vm.messages = response.data.messages;
+                console.log(vm.messages);
+            });
+        }
+    }
     function sendMessage(message) {
         var data = {
             'message': message,
@@ -252,6 +267,7 @@ function OnlineWindowController($http,socket) {
         socket.emit('send_message',data);
     }
     function typingMessage(event) {
+        console.log("called");
         var key = event.which || event.keyCode;
         if(key===13) {
             event.preventDefault();
@@ -273,6 +289,7 @@ function OnlineWindowController($http,socket) {
             url: '/api/online-users'
         }).then(function result(response) {
             vm.onlineUsers = response.data.online_friends;
+            vm.me = response.data.me;
         });
     }
 
@@ -284,5 +301,6 @@ function OnlineWindowController($http,socket) {
         var myEl = angular.element(document.querySelector('#qnimate'));
         myEl.addClass('popup-box-on');
         vm.chatUser = onlineUser;
+        fetchCurrentChatMessages(vm.chatUser.id);
     };
 }

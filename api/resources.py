@@ -3,7 +3,7 @@ from flask import request,jsonify
 import requests
 from flask_login import login_required,current_user
 from app.settings import NOTIFICATION_TYPES
-from fakebook.models import FakeBookUser,FakebookNotification
+from fakebook.models import FakeBookUser,FakebookNotification,FakeBookChat
 from utils import create_notification, get_notifications_for_dashboard, get_all_notifications,\
                         get_all_people,get_all_online_friends_json
 from app import notify_user,update_friends_list_for_receiver,refresh_online_friends
@@ -172,5 +172,16 @@ class OnlineFriendsHandler(Resource):
         online_friends = get_all_online_friends_json()
         return jsonify({
             'online_friends': online_friends,
-            'me': str(current_user.id)
+            'me': current_user.my_json
+        })
+
+class MessagesHandler(Resource):
+    @login_required
+    def get(self):
+        me = current_user.id
+        friend = FakeBookUser.objects.get(id=request.args.get('friend_id')).id
+        chat = FakeBookChat.get_or_create_chat(me,friend)
+        messages = [message.json for message in chat.messages]
+        return jsonify({
+            'messages': messages
         })

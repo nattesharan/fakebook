@@ -249,22 +249,19 @@
                             </div>
                             <div class="popup-messages chat-messages-container">
                                 <div class="chat_box touchscroll chat_box_colors_a">
-                                    <div class="chat_message_wrapper message-wrapper">
+                                    <div class="chat_message_wrapper message-wrapper" ng-repeat="message in vm.messages" ng-class="(message.sent_by_me) ? 'chat_message_right' : ''">
                                         <div class="chat_user_avatar">
-                                            <a href="https://web.facebook.com/iamgurdeeposahan" target="_blank" >
-                                            <img alt="Gurdeep Osahan (Web Designer)" title="Gurdeep Osahan (Web Designer)"  src="http://webncc.in/img/user/gurdeep-singh-osahan.jpg" class="md-user-image">
+                                            <img ng-show="message.sent_by_me" ng-src="[[vm.me.image]]" class="md-user-image">
+                                            <img ng-hide="message.sent_by_me" ng-src="[[vm.chatUser.image]]" class="md-user-image">
                                             </a>
                                         </div>
                                         <ul class="chat_message">
                                             <li>
-                                                <p> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Distinctio, eum? </p>
-                                            </li>
-                                            <li>
-                                                <p> Lorem ipsum dolor sit amet.<span class="chat_message_time">13:38</span> </p>
+                                                <p>[[ message.message ]]</p>
                                             </li>
                                         </ul>
                                     </div>
-                                    <div class="chat_message_wrapper chat_message_right message-wrapper">
+                                    <!-- <div class="chat_message_wrapper chat_message_right message-wrapper">
                                         <div class="chat_user_avatar">
                                         <a href="https://web.facebook.com/iamgurdeeposahan" target="_blank" >
                                             <img alt="Gurdeep Osahan (Web Designer)" title="Gurdeep Osahan (Web Designer)" src="http://bootsnipp.com/img/avatars/bcf1c0d13e5500875fdd5a7e8ad9752ee16e7462.jpg" class="md-user-image">
@@ -311,7 +308,7 @@
                                                 </p>
                                             </li>
                                         </ul>
-                                    </div>
+                                    </div> -->
                                 </div>
                             </div>
                             <div class="popup-messages-footer">

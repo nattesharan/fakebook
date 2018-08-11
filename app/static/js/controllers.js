@@ -238,6 +238,7 @@ function OnlineWindowController($http,socket) {
     vm.onlineUsers = [];
     vm.messages = [];
     vm.typing = false;
+    vm.loadingMessages = false;
     vm.senderTyping = false;
     vm.timeout = undefined;
     vm.message = '';
@@ -254,6 +255,7 @@ function OnlineWindowController($http,socket) {
     }
     function fetchCurrentChatMessages(chat_user_id) {
         if(chat_user_id) {
+            vm.loadingMessages = true;
             $http({
                 method: 'GET',
                 url: '/api/messages',
@@ -262,6 +264,7 @@ function OnlineWindowController($http,socket) {
                 }
             }).then(function result(response) {
                 vm.messages = response.data.messages;
+                vm.loadingMessages = false;
             });
         }
     }

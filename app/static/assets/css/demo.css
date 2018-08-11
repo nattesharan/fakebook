@@ -93,7 +93,10 @@
 
 .default-show-all {
     background-color: white !important;
-} 
+}
+.default-show-all:hover {
+    color: black !important;
+}
 
 .main-body {
     background-color: #F3F3F4;

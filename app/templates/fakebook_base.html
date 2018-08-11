@@ -224,7 +224,7 @@
                                         <a href="#">
                                         <img class="md-user-image" ng-src="[[ vm.chatUser.image ]]" alt="[[ vm.chatUser.name ]]">
                                         <h1>[[ vm.chatUser.name ]]&nbsp;<i class="fa fa-circle" ng-if="vm.chatUser.is_online" style="color:rgb(66, 183, 42)" aria-hidden="true"></i></h1>
-                                        <small class="show-typing-status"><br><span aria-hidden="true"></span>typing</small>
+                                        <small class="show-typing-status" ng-if="vm.senderTyping"><br><span aria-hidden="true"></span>typing</small>
                                     </a>
                                 </div>
                                         <div class="popup-head-right pull-right">

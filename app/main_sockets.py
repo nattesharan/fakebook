@@ -46,3 +46,13 @@ def send_message(data):
     if receiver.is_online:
         emit('new_message',room=str(receiver.id))
     emit('refresh_sender',room=str(sender.id))
+
+def typing_message(data):
+    friend = FakeBookUser.objects.get(id=data['friend'])
+    if friend.is_online:
+        emit('sender_is_typing',room=str(friend.id))
+
+def no_longer_typing(data):
+    friend = FakeBookUser.objects.get(id=data['friend'])
+    if friend.is_online:
+        emit('sender_stopped_typing',room=str(friend.id))

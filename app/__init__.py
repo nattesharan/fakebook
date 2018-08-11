@@ -21,6 +21,8 @@ socketio.on_event('connect',main_sockets.connect)
 socketio.on_event('create_room',main_sockets.create_room)
 socketio.on_event('disconnect',main_sockets.disconnect)
 socketio.on_event('send_message',main_sockets.send_message)
+socketio.on_event('typing',main_sockets.typing_message)
+socketio.on_event('no_longer_typing',main_sockets.no_longer_typing)
 def notify_user(person_id):
     notifications = get_notifications_for_dashboard(person_id)
     socketio.emit('received_friend_request',notifications,room=person_id)

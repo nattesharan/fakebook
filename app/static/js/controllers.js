@@ -237,6 +237,9 @@ function OnlineWindowController($http,socket) {
     var vm = this;
     vm.onlineUsers = [];
     vm.messages = [];
+    vm.typing = false;
+    vm.senderTyping = false;
+    vm.timeout = undefined;
     vm.message = '';
     vm.chatUser = {};
     vm.me = {};
@@ -245,6 +248,10 @@ function OnlineWindowController($http,socket) {
     vm.closeChatWindow = closeChatWindow;
     vm.typingMessage = typingMessage;
 
+    function timeoutFunction(){
+        vm.typing = false;
+        socket.emit('no_longer_typing',{'friend': vm.chatUser.id });
+    }
     function fetchCurrentChatMessages(chat_user_id) {
         if(chat_user_id) {
             $http({
@@ -272,7 +279,14 @@ function OnlineWindowController($http,socket) {
             sendMessage(vm.message);
             vm.message = '';
         } else {
-            // console.log(vm.message);
+            if(vm.typing == false) {
+                vm.typing = true
+                socket.emit('typing',{'friend': vm.chatUser.id })
+                vm.timeout = setTimeout(timeoutFunction, 1000);
+              } else {
+                clearTimeout(vm.timeout);
+                vm.timeout = setTimeout(timeoutFunction, 1000);
+              }
         }
     }
 
@@ -301,6 +315,14 @@ function OnlineWindowController($http,socket) {
     socket.on('refresh_sender',function() {
         fetchCurrentChatMessages(vm.chatUser.id);
     });
+
+    socket.on('sender_is_typing',function() {
+        vm.senderTyping = true;
+    });
+
+    socket.on('sender_stopped_typing',function() {
+        vm.senderTyping = false;
+    })
     function showChatWindow(onlineUser) {
         var myEl = angular.element(document.querySelector('#qnimate'));
         myEl.addClass('popup-box-on');

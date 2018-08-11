@@ -171,5 +171,6 @@ class OnlineFriendsHandler(Resource):
     def get(self):
         online_friends = get_all_online_friends_json()
         return jsonify({
-            'online_friends': online_friends 
+            'online_friends': online_friends,
+            'me': str(current_user.id)
         })

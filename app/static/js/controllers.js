@@ -279,8 +279,7 @@ function OnlineWindowController($http,socket) {
         }
     }
 
-    function loadMoreMessages(currentMessagesLength) {
-        console.log(currentMessagesLength);
+    function loadMoreMessages() {
         vm.skip += 10;
         fetchCurrentChatMessages(vm.chatUser.id,vm.skip,vm.limit)
     }

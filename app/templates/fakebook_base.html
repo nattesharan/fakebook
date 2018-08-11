@@ -315,7 +315,7 @@
                                 </div>
                             </div>
                             <div class="popup-messages-footer">
-                                    <textarea id="status_message message-area" placeholder="Type a message..." rows="10" cols="40" name="message"></textarea>    
+                                    <textarea id="status_message message-area" ng-keydown="vm.typingMessage($event)" ng-model="vm.message" placeholder="Type a message..." rows="10" cols="40" name="message"></textarea>    
                                 <div class="btn-footer">
                                     <button class="bg_none">
                                         <i class="glyphicon glyphicon-film"></i>

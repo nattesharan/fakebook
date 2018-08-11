@@ -236,18 +236,37 @@ OnlineWindowController.$inject = ['$http','socket'];
 function OnlineWindowController($http,socket) {
     var vm = this;
     vm.onlineUsers = [];
-    vm.headlines = [];
+    vm.messages = [];
+    vm.message = '';
+    vm.chatUser = {};
     vm.fetchOnlineUsers = fetchOnlineUsers;
     vm.showChatWindow = showChatWindow;
     vm.closeChatWindow = closeChatWindow;
-    vm.messages = [];
-    vm.chatUser = {};
+    vm.typingMessage = typingMessage;
+    
+    function sendMessage(message) {
+        var data = {
+            'message': message,
+            'sent_to': vm.chatUser.id,
+        }
+        socket.emit('send_message',data);
+    }
+    function typingMessage(event) {
+        var key = event.which || event.keyCode;
+        if(key===13) {
+            event.preventDefault();
+            sendMessage(vm.message);
+            vm.message = '';
+        } else {
+            // console.log(vm.message);
+        }
+    }
 
     function closeChatWindow() {
         var myEl = angular.element(document.querySelector('#qnimate'));
         myEl.removeClass('popup-box-on');
     }
-    
+
     function fetchOnlineUsers() {
         $http({
             method: 'GET',
@@ -265,6 +284,5 @@ function OnlineWindowController($http,socket) {
         var myEl = angular.element(document.querySelector('#qnimate'));
         myEl.addClass('popup-box-on');
         vm.chatUser = onlineUser;
-        console.log(vm.chatUser);
     };
 }

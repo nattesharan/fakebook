@@ -32,4 +32,6 @@ def create_room(data):
     for friend in online_friends:
         emit('refresh_online_friends',room = str(friend.id))
     emit('connected_online',{'users':active_users},room='main')
-    
+
+def send_message(data):
+    print data

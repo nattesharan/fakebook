@@ -324,6 +324,9 @@ function OnlineWindowController($http,socket) {
         vm.senderTyping = false;
     })
     function showChatWindow(onlineUser) {
+        if(onlineUser !== vm.chatUser) {
+            closeChatWindow();
+        }
         var myEl = angular.element(document.querySelector('#qnimate'));
         myEl.addClass('popup-box-on');
         vm.chatUser = onlineUser;

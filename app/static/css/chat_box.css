@@ -114,7 +114,7 @@ body
 
 
 .popup-box .popup-messages {
-    background: #3f9684 none repeat scroll 0 0;
+    background: blueviolet none repeat scroll 0 0;
     height: 275px;
     overflow: auto;
 }

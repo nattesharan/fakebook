@@ -116,7 +116,7 @@ class FakeBookMessages(Document):
     read_on = DateTimeField()
 
     def __str__(self):
-        return self.message_text
+        return str(self.id)
     
     @classmethod
     def new_message(cls,message_text,sender,receiver):

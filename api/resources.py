@@ -3,7 +3,7 @@ from flask import request,jsonify
 import requests
 from flask_login import login_required,current_user
 from app.settings import NOTIFICATION_TYPES
-from fakebook.models import FakeBookUser,FakebookNotification,FakeBookChat
+from fakebook.models import FakeBookUser,FakebookNotification,FakeBookChat, FakeBookMessages
 from utils import create_notification, get_notifications_for_dashboard, get_all_notifications,\
                         get_all_people,get_all_online_friends_json
 from app import notify_user,update_friends_list_for_receiver,refresh_online_friends
@@ -176,13 +176,25 @@ class OnlineFriendsHandler(Resource):
         })
 
 class MessagesHandler(Resource):
+    def get_messages_ordered_by_date(self,messages):
+        return FakeBookMessages.objects.filter(id__in=messages).order_by('-id')
+    
+    def fetch_messages_by_skip_limit(self,messages,skip,limit):
+        sorted_messages = self.get_messages_ordered_by_date(messages)
+        limited_messages = sorted_messages.skip(skip).limit(limit)
+        return limited_messages
+
     @login_required
     def get(self):
         me = current_user.id
         friend = FakeBookUser.objects.get(id=request.args.get('friend_id')).id
+        skip = int(request.args.get('skip'))
+        limit = int(request.args.get('limit'))
         chat,status = FakeBookChat.get_chat(me,friend)
         if status:
-            messages = [message.json for message in chat.messages]
+            messages = chat.messages
+            limited_messages = self.fetch_messages_by_skip_limit(messages,skip,limit)
+            messages = [message.json for message in limited_messages]
             return jsonify({
                 'messages': messages
             })

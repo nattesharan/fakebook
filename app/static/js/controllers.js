@@ -248,25 +248,41 @@ function OnlineWindowController($http,socket) {
     vm.showChatWindow = showChatWindow;
     vm.closeChatWindow = closeChatWindow;
     vm.typingMessage = typingMessage;
-
+    vm.loadMoreMessages = loadMoreMessages;
+    vm.limit = 10;
+    vm.skip = 0;
+    vm.endOfPageMessages = false;
     function timeoutFunction(){
         vm.typing = false;
         socket.emit('no_longer_typing',{'friend': vm.chatUser.id });
     }
-    function fetchCurrentChatMessages(chat_user_id) {
+    function fetchCurrentChatMessages(chat_user_id,skip,limit) {
         if(chat_user_id) {
             vm.loadingMessages = true;
             $http({
                 method: 'GET',
                 url: '/api/messages',
                 params: {
-                    'friend_id': chat_user_id
+                    'friend_id': chat_user_id,
+                    'skip': skip,
+                    'limit': limit
                 }
             }).then(function result(response) {
-                vm.messages = response.data.messages;
                 vm.loadingMessages = false;
+                response.data.messages.forEach(message => {
+                    vm.messages.push(message);
+                });
+                if(response.data.messages.length < vm.limit) {
+                    vm.endOfPageMessages = true;
+                }
             });
         }
+    }
+
+    function loadMoreMessages(currentMessagesLength) {
+        console.log(currentMessagesLength);
+        vm.skip += 10;
+        fetchCurrentChatMessages(vm.chatUser.id,vm.skip,vm.limit)
     }
     function sendMessage(message) {
         var data = {
@@ -312,11 +328,13 @@ function OnlineWindowController($http,socket) {
         fetchOnlineUsers();
     });
     socket.on('new_message',function() {
-        fetchCurrentChatMessages(vm.chatUser.id);
+        vm.messages = [];
+        fetchCurrentChatMessages(vm.chatUser.id,0,10);
     });
 
     socket.on('refresh_sender',function() {
-        fetchCurrentChatMessages(vm.chatUser.id);
+        vm.messages = [];
+        fetchCurrentChatMessages(vm.chatUser.id,0,10);
     });
 
     socket.on('sender_is_typing',function() {
@@ -327,12 +345,15 @@ function OnlineWindowController($http,socket) {
         vm.senderTyping = false;
     })
     function showChatWindow(onlineUser) {
+        vm.endOfPageMessages = false;
+        vm.messages = [];
+        vm.skip = 0;
         if(onlineUser !== vm.chatUser) {
             closeChatWindow();
         }
         var myEl = angular.element(document.querySelector('#qnimate'));
         myEl.addClass('popup-box-on');
         vm.chatUser = onlineUser;
-        fetchCurrentChatMessages(vm.chatUser.id);
+        fetchCurrentChatMessages(vm.chatUser.id,0,10);
     };
 }

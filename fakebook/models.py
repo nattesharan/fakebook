@@ -3,6 +3,7 @@ from mongoengine import Document,StringField,DoesNotExist,ListField,BooleanField
 from flask_login import UserMixin,current_user
 import mongoengine
 import datetime
+import uuid
 class FakeBookUser(Document,UserMixin):
     email = StringField(max_length=128,required=True)
     password = StringField(max_length=128,required=True)
@@ -108,9 +109,41 @@ class FakeBookMessages(Document):
     sent_to = ReferenceField(FakeBookUser)
     read_on = DateTimeField()
 
+    def __str__(self):
+        return self.message_text
+    
+    @classmethod
+    def new_message(cls,message_text,sender,receiver):
+        return cls.objects.create(
+            message_text = message_text,
+            sent_by = sender,
+            sent_to = receiver
+        )
+
 class FakeBookChat(Document):
     chat_id = StringField(required=True)
     chat_created_on = DateTimeField(default=datetime.datetime.now())
     chat_initiated_by = ReferenceField(FakeBookUser)
     chat_initiated_for = ReferenceField(FakeBookUser)
-    messages = ReferenceField(FakeBookMessages,reverse_delete_rule=mongoengine.CASCADE)
+    messages = ListField(ReferenceField(FakeBookMessages,reverse_delete_rule=mongoengine.CASCADE))
+
+    def __str__(self):
+        return self.chat_id
+
+    @classmethod
+    def get_or_create_chat(cls,sender,receiver):
+        friends = [sender,receiver]
+        try:
+            chat = cls.objects.get(chat_initiated_by__in=friends,chat_initiated_for__in=friends)
+            return chat
+        except DoesNotExist:
+            chat = cls.objects.create(
+                    chat_id = str(uuid.uuid4()),
+                    chat_initiated_by = sender,
+                    chat_initiated_for = receiver
+                )
+            sender.chats.append(chat.chat_id)
+            sender.save()
+            receiver.chats.append(chat.chat_id)
+            receiver.save()
+            return chat

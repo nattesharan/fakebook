@@ -1,6 +1,7 @@
 from flask_socketio import join_room,rooms,leave_room,emit
 from flask import request
-from fakebook.models import FakeBookUser
+from flask_login import current_user
+from fakebook.models import FakeBookUser, FakeBookChat, FakeBookMessages
 from utils import get_id_from_rooms, get_active_user_ids
 from api.utils import get_all_online_friends
 def connect():
@@ -34,4 +35,12 @@ def create_room(data):
     emit('connected_online',{'users':active_users},room='main')
 
 def send_message(data):
-    print data
+    sender_rooms = rooms()
+    sender_id = get_id_from_rooms(sender_rooms)
+    receiver = FakeBookUser.objects.get(id=data['sent_to'])
+    sender = FakeBookUser.objects.get(id=sender_id)
+    chat = FakeBookChat.get_or_create_chat(sender,receiver)
+    message = FakeBookMessages.new_message(data['message'],sender,receiver)
+    chat.messages.insert(0,message)
+    chat.save()
+    # print message

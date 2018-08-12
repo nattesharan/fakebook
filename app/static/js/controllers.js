@@ -320,13 +320,17 @@ function OnlineWindowController($http,socket) {
         }).then(function result(response) {
             vm.onlineUsers = response.data.online_friends;
             vm.me = response.data.me;
-            vm.onlineUsers.forEach(onlineUser => {
-                if(JSON.stringify(onlineUser) === JSON.stringify(vm.chatUser)) {
-                    vm.chatUser.is_online = true;
-                } else {
-                    vm.chatUser.is_online = false;
-                }
-            });
+            if(vm.onlineUsers.length) {
+                vm.onlineUsers.forEach(onlineUser => {
+                    if(JSON.stringify(onlineUser) === JSON.stringify(vm.chatUser)) {
+                        vm.chatUser.is_online = true;
+                    } else {
+                        vm.chatUser.is_online = false;
+                    }
+                });
+            } else {
+                vm.chatUser.is_online = false;
+            }
         });
     }
 
@@ -343,16 +347,27 @@ function OnlineWindowController($http,socket) {
         fetchCurrentChatMessages(vm.chatUser.id,0,10);
     });
 
-    socket.on('sender_is_typing',function() {
-        vm.senderTyping = true;
+    socket.on('sender_is_typing',function(data) {
+        if(data.typing_user === vm.chatUser.id) {
+            vm.senderTyping = true;
+        }
     });
 
-    socket.on('sender_stopped_typing',function() {
+    socket.on('sender_stopped_typing',function(data) {
+        if(data.typing_user === vm.chatUser.id) {
         vm.senderTyping = false;
-    })
+        }
+    });
+
+    socket.on('not_friends',function() {
+        console.log('NO longer friends');
+    });
+
     function showChatWindow(onlineUser) {
         vm.endOfPageMessages = false;
         vm.messages = [];
+        vm.senderTyping = false;
+        vm.message = '';
         vm.skip = 0;
         if(onlineUser !== vm.chatUser) {
             closeChatWindow();

@@ -39,20 +39,29 @@ def send_message(data):
     sender_id = get_id_from_rooms(sender_rooms)
     receiver = FakeBookUser.objects.get(id=data['sent_to'])
     sender = FakeBookUser.objects.get(id=sender_id)
-    chat = FakeBookChat.get_or_create_chat(sender,receiver)
-    message = FakeBookMessages.new_message(data['message'],sender,receiver)
-    chat.messages.insert(0,message)
-    chat.save()
-    if receiver.is_online:
-        emit('new_message',room=str(receiver.id))
-    emit('refresh_sender',room=str(sender.id))
+    if sender in receiver.friends and receiver in sender.friends:
+        chat = FakeBookChat.get_or_create_chat(sender,receiver)
+        message = FakeBookMessages.new_message(data['message'],sender,receiver)
+        chat.messages.insert(0,message)
+        chat.save()
+        if receiver.is_online:
+            emit('new_message',room=str(receiver.id))
+        emit('refresh_sender',room=str(sender.id))
+    else:
+        emit('not_friends',room=str(sender.id))
 
 def typing_message(data):
+    typing_user_rooms = rooms()
+    typing_user_id = get_id_from_rooms(typing_user_rooms)
+    typing_user = FakeBookUser.objects.get(id=typing_user_id)
     friend = FakeBookUser.objects.get(id=data['friend'])
-    if friend.is_online:
-        emit('sender_is_typing',room=str(friend.id))
+    if friend in typing_user.friends and typing_user in friend.friends and friend.is_online:
+        emit('sender_is_typing',{'typing_user': str(typing_user_id)},room=str(friend.id))
 
 def no_longer_typing(data):
+    typing_user_rooms = rooms()
+    typing_user_id = get_id_from_rooms(typing_user_rooms)
+    typing_user = FakeBookUser.objects.get(id=typing_user_id)
     friend = FakeBookUser.objects.get(id=data['friend'])
-    if friend.is_online:
-        emit('sender_stopped_typing',room=str(friend.id))
+    if friend in typing_user.friends and typing_user in friend.friends and friend.is_online:
+        emit('sender_stopped_typing',{'typing_user': str(typing_user_id)},room=str(friend.id))

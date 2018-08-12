@@ -320,6 +320,13 @@ function OnlineWindowController($http,socket) {
         }).then(function result(response) {
             vm.onlineUsers = response.data.online_friends;
             vm.me = response.data.me;
+            vm.onlineUsers.forEach(onlineUser => {
+                if(JSON.stringify(onlineUser) === JSON.stringify(vm.chatUser)) {
+                    vm.chatUser.is_online = true;
+                } else {
+                    vm.chatUser.is_online = false;
+                }
+            });
         });
     }
 

@@ -1,5 +1,5 @@
 angular.module('fakebook').factory('socket', ['$rootScope', function($rootScope){
-    $rootScope.server_ip = 'http://192.168.1.19:8080';  
+    $rootScope.server_ip = 'http://23.101.143.33';  
   
     var socket = io.connect($rootScope.server_ip);
     return {

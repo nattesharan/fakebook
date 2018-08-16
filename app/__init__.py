@@ -14,7 +14,7 @@ app.config['MONGODB_SETTINGS'] = MONGODB_SETTINGS
 app.config['WTF_CSRF_SECRET_KEY']="SECRETCSRFKEY"
 CORS(app)
 socketio = SocketIO(manage_session=False)
-socketio.init_app(app)
+socketio.init_app(app,message_queue='redis://')
 login_manager = LoginManager(app)
 db = MongoEngine(app)
 socketio.on_event('connect',main_sockets.connect)

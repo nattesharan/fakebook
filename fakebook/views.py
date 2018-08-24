@@ -6,7 +6,6 @@ fakebook_views = Blueprint('fakebook_views',__name__,template_folder='templates'
 @fakebook_views.route('/dashboard')
 @login_required
 def home():
-    user = current_user
     return render_template('dashboard.html',user=current_user)
 
 @fakebook_views.route('/profile')
